@@ -1,0 +1,55 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+<div class="dropdown d-inline mr-2" style="margin-top: -1px">
+    <button class="btn btn-primary dropdown-toggle" type="button" id="selector1"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        모두 보기
+    </button>
+    <div class="dropdown-menu category0">
+        <a class="dropdown-item" onclick="categoryClick('-1','-1')">모두 보기</a>
+    </div>
+    <div class="card" style="display: none;">
+
+        <div class="card-body">
+            <div class="table-responsive">
+                <table id="log_table" class="table table-bordered table-md" style="font-weight: normal">
+                    <!--                        2020-12-13 10:51:55 AM 상담사1 가견적 등록-->
+
+                    <tr>
+                        <th>순번</th>
+                        <th>세부 카테고리</th>
+                        <th>아이콘 등록</th>
+                        <th>수정</th>
+                        <th>사용/중지</th>
+                        <th>삭제</th>
+                    </tr>
+
+                </table>
+            </div>
+
+        </div>
+
+        <div>
+            <div style=" display: flex;">
+                <label class="line_lable"
+                       style=" width:50px;margin:5px 0 0 20px;width:100px;color: #222222;font-weight: 700">
+                    세부 카테고리</label>
+                <input id="ci_name" placeholder="이름" type="text"
+                       class="line_input form-control">
+            </div>
+        </div>
+        <img class="img_mt_add" style="margin:30px 30px;width: 30px; height: 30px;" onclick="addcategoryInfo()"
+             src="../static/image/add.png"/>
+    </div>
+</div>
+
+
+<script>
+    var imgupload = getPage('item/img_upload.html');
+    document.getElementById("maintitle").innerHTML = "카테고리 관리";
+    var category = getCategory();
+    setCategory(category);
+</script>
+{% endblock %}

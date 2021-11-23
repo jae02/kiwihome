@@ -1,0 +1,160 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+
+<style>
+    canvas {
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        width: 100%;
+    }
+
+    .container {
+        position: relative;
+        width: 50%;
+        margin: 0 auto;
+    }
+
+</style>
+<div>
+
+
+    <div class="col-12 col-md-6 col-lg-6"
+         style="margin-right:0px;margin:20px 0;padding:0;max-width: 93%; color: #222222">
+        <div class="card">
+
+            <div class="card-body">
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/statis_1">시공</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/statis_2">물품 판매 수</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/statis_3">사용자</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/statis_4">협력업체</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/statis_5">정산</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/statis_6">접속 장치</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/statis_7">작업 평가</a>
+                    </li>
+                </ul>
+
+                <div class="container" style="width: 70%; margin-top: 50px;">
+                    <canvas id="canvas" style="margin: 20px;"></canvas>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+<script>
+
+    var labels = ["January", "February", "March", "April", "May", "June", "July"];
+    var getRandomValues = function () {
+        var array = [];
+
+        for (var i = 0; i < labels.length; i++) {
+            var a = Math.round(Math.random() * 7);
+            array.push(a);
+        }
+
+        return array;
+    };
+
+    window.chartColors = {
+        red: 'rgba(255, 99, 132, 0.5)',
+        orange: 'rgba(255, 159, 64, 0.5)',
+        yellow: 'rgba(255, 205, 86, 0.5)',
+        green: 'rgba(75, 192, 192, 0.5)',
+        blue: 'rgba(54, 162, 235, 0.5)',
+        purple: 'rgba(153, 102, 255, 0.5)',
+        grey: 'rgba(231, 233, 237, 0.5)'
+    };
+
+    var barChartData = {
+        labels: labels,
+        datasets: [
+            {
+                label: '인테리어',
+                backgroundColor: window.chartColors.red,
+                yAxisID: "y-axis-1",
+                data: getRandomValues()
+            },
+            {
+                label: '수리',
+                backgroundColor: window.chartColors.green,
+                yAxisID: "y-axis-1",
+                data: getRandomValues()
+            },
+            {
+                label: '설치',
+                backgroundColor: window.chartColors.blue,
+                yAxisID: "y-axis-1",
+                data: getRandomValues()
+            },
+
+
+        ]
+
+
+    };
+    window.onload = function () {
+        var ctx = document.getElementById("canvas").getContext("2d");
+        window.myBar = new Chart(ctx, {
+            type: 'bar',
+            data: barChartData,
+            options: {
+                responsive: true,
+                title: {
+                    display: true,
+                    text: ""
+                },
+                tooltips: {
+                    mode: 'index',
+                    intersect: true
+                },
+                scales: {
+                    xAxes: [{
+                        stacked: true
+                    }],
+                    yAxes: [{
+                        type: "linear", // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+                        stacked: true,
+                        display: true,
+                        position: "left",
+                        id: "y-axis-1",
+                        ticks: {
+                            beginAtZero: true,
+                            suggestedMin: 0,
+                            suggestedMax: 10,
+                            min: 0
+                        }
+                    }, {
+                        type: "linear", // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+                        display: false,
+                        id: "y-axis-2",
+                        ticks: {
+                            beginAtZero: true,
+                            suggestedMin: 0,
+                            suggestedMax: 10,
+                            min: 0
+                        }
+                    }],
+                }
+            }
+        });
+    };
+</script>
+{% endblock %}

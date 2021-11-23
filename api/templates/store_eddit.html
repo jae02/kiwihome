@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+<script type="text/javascript" src="../static/js/store.js?v={{v}}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.min.js"></script>
+    <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <!-- CSS Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+    <script type="text/javascript" src="jscript/graph.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript" src="../static/js/main.js?v={{v}}"></script>
+    <script type="text/javascript" src="../static/js/api.js?v={{v}}"></script>
+    <script type="text/javascript" src="../static/js/review.js?v={{v}}"></script>
+    <script type="text/javascript" src="../static/js/jay02.js?v={{v}}"></script>
+    <!-- Template CSS -->
+    <link rel="stylesheet" href="../static/css/style.css?v={{v}}">
+    <link rel="stylesheet" href="../static/css/components.css">
+    <!-- include summernote css/js-->
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.css" rel="stylesheet">
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+
+    <script src="https://www.jsviews.com/download/jsrender.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsrender/1.0.11/jsrender.min.js"></script>
+</head>
+<body>
+<div id="container">
+<form action="http://teambox.kr:5222/updateeddit" accept-charset="utf-8" name="updateeddit" method="get" target="iframe1">
+    <fieldset style="width:150">
+    <legend>업체 정보 수정</legend><br><br>
+    업체명 : <input id="name1" type="text" name="store_name"/> <br><br><br>
+    업체 전화번호 : <input id="tel1" type="text" name="tel"/> <br><br><br>
+    사업자 번호 <input id="store_number" type="text" name="business_number"/> <br><br><br>
+        주업무 : <select id="mainwork" name="category_seq">
+        <option value="1">인테리어</option>
+        <option value="2">이사/입주</option>
+        <option value="3">자재</option>
+        <option value="4">물품</option>
+        <option value="5">설치</option>
+    </select> <br><br><br>
+    세부업무 : <select id="subwork" name="subwork">
+        <option value="2">주방</option>
+        <option value="3">도배</option>
+        <option value="4">마루/장판</option>
+        <option value="5">필름시공</option>
+        <option value="6">가구</option>
+        <option value="7">타일</option>
+        <option value="8">창호</option>
+        <option value="9">중문/도어</option>
+        <option value="10">페인트/탄성코팅</option>
+        <option value="11">조명/전기</option>
+        <option value="12">블라인드/커튼</option>
+        <option value="13">이사</option>
+        <option value="14">입주청소</option>
+        <option value="24">전구류</option>
+    </select> <br><br><br>
+
+<input style="visibility: hidden;" id="storeseq" type="text" name="store_seq" value=""/>
+
+    <input type="submit" style="float : right;" value="변경" onclick="callbackfunction();"/>
+        </fieldset>
+</form>
+    <iframe id="iframe1" name="iframe1" style="display:none"></iframe>
+
+
+</div>
+
+
+<script>
+function getParam1(sname) {
+
+    var params = location.search.substr(location.search.indexOf("?") + 1);
+
+    var sval = "";
+
+    params = params.split("&");
+
+    for (var i = 0; i < params.length; i++) {
+
+        temp = params[i].split("=");
+
+        if ([temp[0]] == sname) { sval = temp[1]; }
+
+    }
+
+    return sval;
+
+}
+document.getElementById("storeseq").value = getParam1('seq');
+
+function callbackfunction(){
+setTimeout(function(){
+   // 1초 후 작동해야할 코드
+      window.open("about:blank","_self").close();
+   }, 1000);
+opener.callbackparent();
+
+
+
+}
+var product = getedditdata(getParam1("seq"));
+setedditdata(product);
+</script>
+</body>
+</html>

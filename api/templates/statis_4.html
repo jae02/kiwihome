@@ -1,0 +1,128 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+
+<style>
+    canvas {
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        width: 100%;
+    }
+
+    .container {
+        position: relative;
+        width: 50%;
+        margin: 0 auto;
+    }
+
+</style>
+<div>
+
+
+    <div class="col-12 col-md-6 col-lg-6"
+         style="margin-right:0px;margin:20px 0;padding:0;max-width: 93%; color: #222222">
+        <div class="card">
+
+            <div class="card-body">
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/statis_1">시공</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/statis_2">물품 판매 수</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/statis_3">사용자</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/statis_4">협력업체</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/statis_5">정산</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/statis_6">접속 장치</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/statis_7">작업 평가</a>
+                    </li>
+                </ul>
+
+                <div class="container" style="width: 30%; margin-top: 50px;">
+                    <canvas id="canvas"></canvas>
+                </div>
+                <div class="table-responsive" style="text-align: center;margin-top: 50px;">
+                    <table class="table table-bordered table-md"
+                           style=" width:50%;margin: auto;font-weight: normal">
+                        <!--                        2020-12-13 10:51:55 AM 상담사1 가견적 등록-->
+                        <tr>
+                            <th>협력업체 유형</th>
+                            <th>업체수</th>
+                            <th>백분율</th>
+                        </tr>
+                        <tr>
+
+                            <td>인테리어</td>
+                            <td>0</td>
+                            <td>0%</td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>수리</td>
+                            <td>0</td>
+                            <td>0%</td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>설치</td>
+                            <td>0</td>
+                            <td>0%</td>
+
+                        </tr>
+
+
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+<script>
+    var ctx = document.getElementById("canvas");
+    var myChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['인테리어', '수리', '설치'],
+            datasets: [{
+                label: '',
+                data: [19, 3, 5],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.5)',
+                    'rgba(54, 162, 235, 0.5)',
+                    'rgba(255, 206, 86, 0.5)'
+                ],
+                borderColor: [
+                    'rgba(255,99,132,1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            //cutoutPercentage: 40,
+
+
+        }
+    });
+</script>
+{% endblock %}

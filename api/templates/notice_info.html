@@ -1,0 +1,181 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-12 col-md-6 col-lg-6" style=" max-width:100%;flex:100%;margin-top: 50px;">
+        <div class="card">
+            <div class="card-header">
+                <h4>공지/이벤트 정보</h4>
+                <div class="card-header-form" style="margin-top: 10px;">
+
+                </div>
+            </div>
+            <div class="card-body">
+
+                <div class="stock_drop_con">
+
+                    <div style="margin-left: 230px;" class="stock_drop_title">
+                        카테고리
+                    </div>
+                    <div class="dropdown d-inline mr-2">
+                        <button id="selector1" class="btn btn-primary dropdown-toggle" type="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            선택
+                        </button>
+                        <div class="category0 dropdown-menu">
+                            <a class="dropdown-item" onclick="setText('selector1','공지');">공지</a>
+                            <a class="dropdown-item" onclick="setText('selector1','이벤트');">이벤트</a>
+                            <a class="dropdown-item" onclick="setText('selector1','협력업체공지');">협력업체공지</a>
+                            <a class="dropdown-item" onclick="setText('selector1','자주 묻는 질문');">자주 묻는 질문</a>
+                        </div>
+                    </div>
+
+                    <div class="stock_drop_title">
+                        FAQ 카테고리
+                    </div>
+                    <input type="hidden" id="faq_seq">
+                    <div class="dropdown d-inline mr-2 category_info">
+                        <button id="selector2" class="btn btn-primary dropdown-toggle" type="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            선택
+                        </button>
+                        <div class="category0 dropdown-menu" id="faqCList">
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <div style="margin-top: 70px;">
+                    <div class="stock_input_con">
+                        <label class="line_lable">이벤트 대표 이미지 등록</label>
+                        <input type="hidden" id="img_url">
+                        <input style="width:300px" type="file" id="input-image"
+                               class="line_input form-control category_detail_input">
+                    </div>
+                    <div class="stock_input_con">
+                        <label class="line_lable">이벤트 진행 기간</label>
+                        <input style="width:200px;height: 25px;" type="date" id="start_dt"
+                               class="line_input form-control category_detail_input"> ~
+                        <input style="width:200px;height: 25px;" type="date" id="end_dt"
+                               class="line_input form-control category_detail_input">
+                    </div>
+                    <div class="stock_input_con">
+                        <label class="line_lable">제목</label>
+                        <input style="width:200px;height: 25px;" type="text" id="title"
+                               class="line_input form-control category_detail_input">
+                    </div>
+
+                    <div style="margin: 40px;">
+                        상세 설명 작성
+                    </div>
+                    <div class="form-group row mb-4">
+                        <div class="col-sm-12 col-md-7" style=" max-width:100%;flex:100%;width: 100%;height: 200px;">
+                            <!--<textarea class="summernote-simple"
+                                      style=" max-width:100%;flex:100%;width: 100%;height: 200px;"></textarea>-->
+                            <div id="summernote" class="summernote-simple"
+                                 style=" max-width:100%;flex:100%;width: 100%;height: 200px;"></div>
+                        </div>
+                    </div>
+
+                    <div style="margin: 40px;">
+                        배너 또는 팝업창 연동 등록
+                    </div>
+                    <div class="stock_input_con">
+                        <label class="line_lable">배너</label>
+                        <input style="width:300px" type="file"
+                               class="line_input form-control category_detail_input">
+                    </div>
+                    <div class="stock_input_con">
+                        <label class="line_lable">팝업</label>
+                        <input style="width:300px" type="file"
+                               class="line_input form-control category_detail_input">
+                    </div>
+
+                    <div class="stock_input_con">
+                        <label class="line_lable">이벤트 노출 기간</label>
+                        <input style="width:200px;height: 25px;" type="date" id="see_start_dt"
+                               class="line_input form-control category_detail_input"> ~
+                        <input style="width:200px;height: 25px;" type="date" id="see_end_dt"
+                               class="line_input form-control category_detail_input">
+                    </div>
+
+                    <div class="stock_input_con">
+                        <label><input type="checkbox" id="push"> PUSH 전송</label>
+                    </div>
+
+                    <div class="hide-sidebar-mini" style="margin: auto;width: 100px;">
+                        <a style="color: #ffffff" onclick="updatenoticeDetail1();"
+                           class="btn btn-primary btn-lg btn-block btn-icon-split">
+                            수정
+                        </a>
+                        <a style="color: #ffffff" onclick="deleteNotice1();"
+                           class="btn btn-primary btn-lg btn-block btn-icon-split">
+                            삭제
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+</div>
+<script>
+
+    document.getElementById("maintitle").innerHTML = "공지/이벤트 정보";
+    let qs = getQueryStringObject();
+    var board_seq = qs.seq;
+
+    let data = getnoticeOne(board_seq);
+
+    const inputImage = document.getElementById("input-image");
+    inputImage.addEventListener("change", e => {
+        console.log("change");
+        let file = document.getElementById("input-image").files[0];
+        let extension = file.name.split('.')[1];
+        let filename = generate_token(28) + "." + extension;
+        savefile(file, filename);
+
+        $("#img_url").val(api_server + '/static/data/' + filename);
+    })
+
+    function deleteNotice1() {
+        deleteNotice(board_seq);
+    }
+
+    function updatenoticeDetail1() {
+        updatenoticeDetail(board_seq);
+    }
+
+    var faqCList = getfaqCList();
+</script>
+{% endblock %}
+
+<!--<div class="dropdown d-inline mr-2">-->
+<!--                      <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
+<!--                        선택-->
+<!--                      </button>-->
+<!--                      <div class="dropdown-menu">-->
+<!--                        <a class="dropdown-item" href="#">Action</a>-->
+<!--                        <a class="dropdown-item" href="#">Another action</a>-->
+<!--                        <a class="dropdown-item" href="#">Something else here</a>-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--
+var category = getCategory();
+    setCategory_add(category);-->
+
+<!--
+    sessionStorage.setItem("addcatede", 0);
+    // input file에 change 이벤트 부여
+    const inputImage = document.getElementById("input-image");
+    inputImage.addEventListener("change", e => {
+        readImage(e.target)
+    })
+    document.getElementById("preview-image").onclick = function () {
+        inputImage.click();
+    };
+    document.getElementById("maintitle").innerHTML = "공지/이벤트 등록";-->

@@ -1,0 +1,363 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<script src="../static/js/commonAjax.js"></script>
+<script src="https://www.jsviews.com/download/jsrender.min.js"></script>
+
+<style>
+    .gopage {
+        display: inline-block
+    }
+
+</style>
+<script>
+    var gsearchs = [];
+    $(function () {
+        $.views.settings.delimiters("((", "))");
+        init(1);
+        getSearchList();
+        // $(document).on("click", ".go-detail-item", function () {
+        //     var review_seq = $(this).attr("data-seq");
+        //     location.href = "/notice_info?seq=" + review_seq;
+        // })
+        $(".search-btn").click(function () {
+            var searchs = [];
+
+            var type_seq = $("#selector1").attr("data-val");
+            if (type_seq) {
+                var obj = {
+                    "name": "type_seq",
+                    "value": type_seq
+                }
+                searchs.push(obj);
+            }
+
+            var event_yn = $("#selector2").attr("data-val");
+            if (event_yn) {
+                var obj = {
+                    "name": "event_yn",
+                    "value": event_yn
+                }
+                searchs.push(obj);
+
+                var obj2 = {
+                    "name": "type_seq",
+                    "value": "E"
+                }
+                searchs.push(obj2);
+            }
+
+            var faq_type = $("#selector3").attr("data-val");
+            if (faq_type) {
+                var obj = {
+                    "name": "faq_type",
+                    "value": faq_type
+                }
+                searchs.push(obj);
+            }
+
+
+            var create_dt = $("input[name=create_dt]").val();
+            if (create_dt) {
+                var obj = {
+                    "name": "create_dt",
+                    "value": create_dt
+                }
+                searchs.push(obj);
+            }
+
+            var search_type = $("select[name=search_type]").val();
+            var title = $("input[name=title]").val();
+            if (title) {
+                var obj = {
+                    "name": "title",
+                    "value": title
+                }
+                searchs.push(obj);
+            }
+            gsearchs = searchs;
+            init(1);
+        })
+        $(document).on("click", ".gopage", function () {
+            var page = $(this).attr("data-page");
+            init(page);
+        })
+
+    })
+
+    function init(page) {
+        var param = {
+            "page": page,
+            "page_block": 10,
+            "searchs": gsearchs,
+            "table": "board",
+            "sort": "create_dt desc"
+        }
+
+        ajaxCallPost(api_server + "getsearchdata", param, function (res) {
+            var template = $.templates("#notice-list"); // <!-- 템플릿 선언
+            var htmlOutput = template.render(res); // <!-- 렌더링 진행 -->
+            $(".tbody").html(htmlOutput);
+
+
+            $(".first").attr("data-page", res.paging.firstPageNo);
+            $(".prev").attr("data-page", res.paging.prevPageNo);
+            $(".next").attr("data-page", res.paging.nextPageNo);
+            $(".last").attr("data-page", res.paging.finalPageNo);
+
+            var str = "";
+            for (var i = res.paging.startPageNo; i <= res.paging.endPageNo; i++) {
+                if (i == res.paging.page) {
+                    str += "<li data-page='" + i + "' class='page-item active gopage'><a class='page-link'>" + i + "<span class='sr-only'>(current)</span></a></li>";
+                } else {
+                    str += "<li data-page='" + i + "' class='page-item gopage'><a class='page-link' >" + i + "</a></li>";
+                }
+            }
+            $(".pageAll").html(str);
+
+
+            $(".currentPage").text(res.paging.page);
+            $(".lastPage").text(res.paging.finalPageNo);
+            $(".pageBlockCnt").text(res.data.length);
+
+
+        })
+    }
+
+    function getSearchList() {
+        var param = {
+            "page": "1",
+            "page_block": "99",
+            "searchs": [],
+            "table": "board_type",
+            "sort": "create_dt asc"
+        }
+        ajaxCallPost(api_server + "getsearchdata", param, function (res) {
+            var template = $.templates("#notice_list_category_list"); // <!-- 템플릿 선언
+            var htmlOutput = template.render(res); // <!-- 렌더링 진행 -->
+            $(".search-category-list").html(htmlOutput);
+        })
+    }
+
+
+</script>
+<script type="text/x-jsrender" id="notice_list_category_list">
+        <a class="dropdown-item" onclick="setTextCus('selector3','모두 보기', '');">모두보기</a>
+		((for data ))
+            <a class="dropdown-item" onclick="setTextCus('selector3','((:name))', '((:type_seq))');">((:name))</a>
+		((/for ))
+
+
+
+</script>
+<div class="row">
+    <div class="col-12 col-md-6 col-lg-6" style=" max-width:100%;flex:100%;margin-top: 50px;">
+        <div class="card">
+            <div class="card-header">
+                <h4>공지&이벤트 목록</h4>
+                <div class="card-header-form" style="margin-top: 10px;">
+                    <input type="date" name="create_dt"
+                           style="margin-top: -1px; padding-left:10px; padding-right:10px;border-radius:30px;float:right;margin-left: 10px;border:1px #cccccc solid;">
+                    <form style="float: right;margin-left: 5px;">
+                        <div class="input-group" style="float: right;">
+                            <input type="text" class="form-control" placeholder="Search" name="title">
+                            <div class="input-group-btn">
+                                <button class="btn btn-primary search-btn" type="button"><i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="dropdown d-inline mr-2" style="float: right;margin-top: -1px">
+                        <button id="selector3" class="btn btn-primary dropdown-toggle" type="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            모두 보기
+                        </button>
+                        <div class="dropdown-menu search-category-list">
+                        </div>
+                    </div>
+
+                    <div class="dropdown d-inline mr-2" style="float: right;margin-top: -1px">
+                        <button id="selector2" class="btn btn-primary dropdown-toggle" type="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            모두 보기
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" onclick="setTextCus('selector2','모두 보기', '');">모두보기</a>
+                            <a class="dropdown-item" onclick="setTextCus('selector2','진행', 'Y');">진행</a>
+                            <a class="dropdown-item" onclick="setTextCus('selector2','완료', 'N');">완료</a>
+                        </div>
+                    </div>
+                    <div class="dropdown d-inline mr-2" style="float: right;margin-top: -1px">
+                        <button id="selector1" class="btn btn-primary dropdown-toggle" type="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            모두 보기
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" onclick="setTextCus('selector1','모두 보기', ''); ">모두 보기</a>
+                            <a class="dropdown-item" onclick="setTextCus('selector1','공지', 'N'); ">공지</a>
+                            <a class="dropdown-item" onclick="setTextCus('selector1','이벤트', 'E'); ">이벤트</a>
+                            <a class="dropdown-item" onclick="setTextCus('selector1','협력업체공지', 'SN'); ">협력업체 공지</a>
+                            <a class="dropdown-item" onclick="setTextCus('selector1','FAQ', 'F'); ">FAQ</a>
+                        </div>
+                    </div>
+
+                    <div class="hide-sidebar-mini" style="margin-right: 20px;float: right;width: 100px;">
+                        <a href="/notice_add" class="btn btn-primary btn-lg btn-block btn-icon-split">
+                            등록
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="log_table" class="table table-bordered table-md" style="font-weight: normal">
+                        <tr>
+                            <th>등록일</th>
+                            <th>카테고리</th>
+                            <th>제목</th>
+                            <th>진행기간</th>
+                            <th>이벤트 상태</th>
+                            <th>배너(노출여부)</th>
+                            <th>팝업(노출여부)</th>
+                        </tr>
+                        <tbody class="tbody">
+
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+            <div class="card-footer text-right">
+                <nav class="d-inline-block">
+                    <ul class="pagination mb-0">
+                        <li class="page-item">
+                            <a class="page-link prev gopage"><i class="fas fa-chevron-left"></i></a>
+                        </li>
+
+
+                        <div class="pageAll"></div>
+
+
+                        <li class="page-item">
+                            <a class="page-link next gopage"><i class="fas fa-chevron-right"></i></a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+
+    //var notice = getnotice();
+    //console.log(notice);
+    //setnotice(notice);
+    document.getElementById("maintitle").innerHTML = "공지/이벤트 관리";
+</script>
+<script id="notice-list" type="text/x-jsrender">
+      ((for data))
+        <tr>
+            <td>((:create_dt))</td>
+             <td>
+                ((if type_seq == 'SN'))
+                    협력업체
+                ((else type_seq == 'E'))
+                    이벤트
+                ((else type_seq == 'N'))
+                    공지
+                ((else type_seq == 'F'))
+                    FAQ
+                ((/if))
+            </td>
+            <td class="go-detail-item" data-seq="((:board_seq))">((:title))</td>
+
+            <td>((if start_dt && start_dt != 'None' && end_dt && end_dt != 'None'))((:start_dt)) ~ ((:end_dt))((/if))</td>
+            <td>
+                ((if type_seq == 'E'))
+                     ((if event_yn == 'Y'))
+                         <input type="button" class="btn btn-primary chagne-board-yn" data-seq="((:board_seq))" data-column="event_yn" data-val="N" value="진행">
+                     ((else))
+                         <input type="button" class="btn btn-primary chagne-board-yn" data-seq="((:board_seq))" data-column="event_yn" data-val="Y" value="완료">
+                    ((/if))
+                ((/if))
+            </td>
+            <td>
+                ((if type_seq == 'E'))
+                     ((if banner_yn == 'Y'))
+                        <input type="button" class="btn btn-primary chagne-board-yn" data-seq="((:board_seq))" data-column="banner_yn" data-val="N" value="노출">
+                     ((else))
+                        <input type="button" class="btn btn-primary chagne-board-yn" data-seq="((:board_seq))" data-column="banner_yn" data-val="Y" value="중지">
+                    ((/if))
+                ((/if))
+            </td>
+            <td>
+                ((if type_seq == 'E'))
+                     ((if popup_yn == 'Y'))
+                         <input type="button" class="btn btn-primary chagne-board-yn" data-seq="((:board_seq))" data-column="popup_yn" data-val="N" value="노출">
+                     ((else))
+                        <input type="button" class="btn btn-primary chagne-board-yn" data-seq="((:board_seq))" data-column="popup_yn" data-val="Y" value="중지">
+                    ((/if))
+                ((/if))
+            </td>
+        </tr>
+     ((/for))
+
+
+
+
+</script>
+<script>
+    $(function () {
+        $(document).on("click", ".chagne-board-yn", function () {
+            var thisObj = $(this);
+            var seq = thisObj.attr("data-seq");
+            var column = thisObj.attr("data-column");
+            var val = thisObj.attr("data-val");
+            var param = {
+                "board_seq": seq,
+                "column": column,
+                "value": val
+            }
+            ajaxCallPost(api_server + "changeBoard", param, function (res) {
+                if (res.status == 200) {
+                    if (column == 'event_yn') {
+
+                        if (val == 'Y') {
+                            thisObj.attr("data-val", "N");
+                            thisObj.val("진행");
+                        } else if (val == 'N') {
+                            thisObj.attr("data-val", "Y");
+                            thisObj.val("완료");
+                        }
+                    }
+
+                    if (column == 'banner_yn') {
+                        if (val == 'Y') {
+                            thisObj.attr("data-val", "N");
+                            thisObj.val("노출");
+                        } else if (val == 'N') {
+                            thisObj.attr("data-val", "Y");
+                            thisObj.val("중지");
+                        }
+                    }
+
+                    if (column == 'popup_yn') {
+                        if (val == 'Y') {
+                            thisObj.attr("data-val", "N");
+                            thisObj.val("노출");
+                        } else if (val == 'N') {
+                            thisObj.attr("data-val", "Y");
+                            thisObj.val("중지");
+                        }
+                    }
+                }
+            })
+        })
+    })
+
+</script>
+{% endblock %}
+
+<!--
+    setproduct(getnotice);-->

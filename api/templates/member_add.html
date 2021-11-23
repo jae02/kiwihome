@@ -1,0 +1,97 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-12 col-md-6 col-lg-6" style=" max-width:100%;flex:100%;margin-top: 50px;">
+        <div class="card">
+            <div class="card-header">
+                <h4>계정 등록</h4>
+                <div class="card-header-form" style="margin-top: 10px;">
+
+                </div>
+            </div>
+            <div class="card-body">
+
+
+                <div style="margin-top: 70px;">
+                    <div class="stock_input_con">
+                        <label class="line_lable">계정유형</label>
+                        <label><input type="radio" name="member_type" value="A"> 관리자</label>
+                        <span style="white-space: pre;">&#9;</span>
+                        <label><input type="radio" name="member_type" value="C"> 상담사</label>
+                    </div>
+
+                    <div class="stock_input_con">
+                        <label class="line_lable">아이디</label>
+                        <input style="width:200px;height: 25px;" type="text" id="id"
+                               class="line_input form-control category_detail_input">
+                    </div>
+
+                     <div class="stock_input_con">
+                        <label class="line_lable">비밀번호</label>
+                        <input style="width:200px;height: 25px;" type="text" id="pw"
+                               class="line_input form-control category_detail_input">
+                    </div>
+
+                    <div class="stock_input_con">
+                        <label class="line_lable">비밀번호 확인</label>
+                        <input style="width:200px;height: 25px;" type="text" id="pw_check"
+                               class="line_input form-control category_detail_input">
+                    </div>
+
+                    <div class="stock_input_con">
+                        <label class="line_lable">사용자 이름</label>
+                        <input style="width:200px;height: 25px;" type="text" id="name"
+                               class="line_input form-control category_detail_input">
+                    </div>
+
+                    <div class="stock_input_con">
+                        <label class="line_lable">휴대폰 번호</label>
+                        <input style="width:200px;height: 25px;" type="text" id="phone"
+                               class="line_input form-control category_detail_input">
+                    </div>
+
+                    <div class="stock_input_con">
+                        <label class="line_lable">휴대폰 주문 알림 수신</label>
+                        <label><input type="checkbox" id="sendI"> 인테리어</label>
+                        <span style="white-space: pre;">&#9;</span>
+                        <label><input type="checkbox" id="sendR"> 수리</label>
+                    </div>
+
+                    <div class="stock_input_con">
+                        <label class="line_lable">휴대폰 정산산 알림 수신</label>
+                       <label><input type="checkbox" id="send"></label>
+                    </div>
+
+                    <div class="stock_input_con">
+                        <label class="line_lable">초기상태</label>
+                        <label><input type="radio" name="show_yn" value="Y"> 사용</label>
+                        <span style="white-space: pre;">&#9;</span>
+                        <label><input type="radio" name="show_yn" value="N"> 중지</label>
+                    </div>
+
+                    <div class="hide-sidebar-mini" style="margin: auto;width: 100px;">
+                        <a style="color: #ffffff" onclick="addmemberDetail();"
+                           class="btn btn-primary btn-lg btn-block btn-icon-split">
+                            등록
+                        </a>
+                    </div>
+                </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+
+    $(document).ready(function() {
+      $('#summernote').summernote();
+    });
+
+
+    document.getElementById("maintitle").innerHTML = "멤버 등록";
+</script>
+{% endblock %}

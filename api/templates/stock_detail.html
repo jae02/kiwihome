@@ -1,0 +1,90 @@
+{% extends 'stock_index.html' %}
+
+{% block content %}
+<style>
+
+    .stock_input_con {
+        margin-right: 0px;
+        justify-content: start;
+
+
+    }
+</style>
+<div class="row">
+    <div class="col-12 col-md-6 col-lg-6" style=" max-width:100%;flex:100%;margin-top: 50px;">
+        <div class="card">
+            <div class="card-header">
+                <h4>물품 등록</h4>
+                <div class="card-header-form" style="margin-top: 10px;">
+
+                </div>
+            </div>
+            <div class="card-body">
+
+                <div class="stock_input_con" style="  float: left;">
+
+                    <div class="image-container">
+                        <img style="width: 200px; height: 200px; border: #888888 1px solid" id="preview-image"
+                             src="https://dummyimage.com/500x500/ffffff/000000.png&text=preview+image">
+                        <input style="display: none;" type="file" id="input-image">
+                    </div>
+                </div>
+                <div style="margin-left: 30px; margin-top: 30px;  float: left;">
+                    <div class="stock_input_con">
+                        <label class="line_lable">상품명</label>
+                        <input style="width:200px;height: 25px;" type="text"
+                               class="line_input form-control category_detail_input" readonly>
+                    </div>
+                    <div class="stock_input_con">
+                        <label class="line_lable">판매가</label>
+                        <input style="width:200px;height: 25px;" type="text" placeholder="원"
+                               class="line_input form-control category_detail_input" readonly>
+                    </div>
+
+                    <div class="stock_input_con">
+                        <label class="line_lable">재고 개수</label>
+                        <input style="width:200px;height: 25px;" type="text" placeholder="개"
+                               class="line_input form-control category_detail_input" readonly>
+                    </div>
+                    <div class="stock_input_con">
+                        <label class="line_lable">구매 개수</label>
+                        <input style="width:200px;height: 25px;" type="number" placeholder="개"
+                               class="line_input form-control category_detail_input">
+                    </div>
+
+
+                </div>
+                <div class="form-group row mb-4" style="width: 90% ;">
+                    <div style="margin: 40px; color:#8c98f3; font-weight: 700; ">
+
+                        상세 설명
+                    </div>
+
+                    <div class="col-sm-12 col-md-7" style=" max-width:100%;flex:100%;width: 100%;height: 200px;">
+                        <input type="text" id="explain"
+                               style=" max-width:100%;flex:100%;width: 100%;height: 200px;" readonly>
+                    </div>
+                </div>
+                <div>
+                    <div class="hide-sidebar-mini" style="margin: auto;width: 100px;">
+                        <a style="color: #ffffff"
+                           class="selectproduct btn btn-primary btn-lg btn-block btn-icon-split">
+                            선택
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+
+    let qs = getQueryStringObject();
+    seq = qs.seq;
+    var product = getoneproduct(seq);
+    startstockdetail(seq);
+
+</script>
+{% endblock %}

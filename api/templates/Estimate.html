@@ -1,0 +1,127 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+<div>
+    <div style="font-size: 50px;transform: translate(50px, 50px);">견 적 서</div>
+
+
+    <div style="display: inline-block; width: 44%;">
+        <table border="1" style="text-align: center;border-collapse: collapse;background-color: #e9ebf5;width: 100%;">
+            <tbody>
+            <tr>
+                <td rowspan="4">고객 정보</td>
+                <td>성 함</td>
+                <td class="user_im"></td>
+            </tr>
+            <tr>
+                <td>주 소</td>
+                <td class="user_im"></td>
+            </tr>
+            <tr>
+                <td>전 화 번 호</td>
+                <td class="user_im"></td>
+            </tr>
+            <tr>
+                <td>견 적 일 자</td>
+                <td class="user_im"></td>
+            </tr>
+
+            </tbody>
+        </table>
+    </div>
+
+    <div style="display: inline-block ; width: 55.5%;">
+        <table border="1" style="text-align: center;border-collapse: collapse;background-color: #e9ebf5;width: 100%;">
+            <tbody>
+            <tr>
+                <td rowspan="8">공급자</td>
+                <td>사 업 자 번 호</td>
+                <td class="store_im">182-88-01065</td>
+            </tr>
+            <tr>
+                <td>법 인 명</td>
+                <td class="store_im">주식회사 디지털허그</td>
+            </tr>
+            <tr>
+                <td>대 표 자</td>
+                <td class="store_im">김희정</td>
+            </tr>
+            <tr>
+                <td>상 호</td>
+                <td class="store_im">키위홈</td>
+            </tr>
+            <tr>
+                <td>주 소</td>
+                <td class="store_im">경기도 성남시 분당구 구미동 161 <br>CGV스퀘어 2층</td>
+            </tr>
+            <tr>
+                <td>업 태</td>
+                <td class="store_im">건설업</td>
+            </tr>
+            <tr>
+                <td>종 목</td>
+                <td class="store_im">인테리어공사,실내장식공사</td>
+            </tr>
+            <tr>
+                <td>전 화 번 호</td>
+                <td class="store_im">1522-8601</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div>
+        <table id="table_job" style="width: 100%;height: 500px;text-align: center;">
+            <tbody id="job1">
+            </tbody>
+        </table>
+
+    </div>
+
+
+    <div>
+        본 견적서의 유효기간은 발행일로부터 30일입니다.<br>
+        현장 방문 후 본 견적서의 내용 및 금액은 변동될 수 있습니다.<br>
+        키위홈을 통하지 않은 파트너와의 계약에 대해서는 키위홈에서 책임지지 않습니다.
+    </div>
+    <style>
+        #job1 {
+            color: #FFFFFF;
+        }
+
+        td {
+            border-left: 1px solid #FFFFFF;
+        }
+
+        .tb1 {
+            background-color: #4472c4;
+        }
+
+        .tb2 {
+            color: #000000;
+        }
+
+        .tb2:nth-child(odd) {
+            background-color: #cfd5ea;
+        }
+
+        .tb2:nth-child(even) {
+            background-color: #e9ebf5;
+        }
+
+        .job11 {
+            width: 75%;
+        }
+    </style>
+</div>
+
+<script>
+    var trans = getEstimate();
+    var category_info1 = getcategoryinfo1(); // 카테고리 목록 ex) category_info1[1]['name'] = 욕실
+
+
+    getjob1(category_info1); //consulting_job에서 선택한 seq에 해당하는 job 목록을 가져온다.
+
+</script>
+{% endblock %}

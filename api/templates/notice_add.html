@@ -1,0 +1,285 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<script src="../static/js/commonAjax.js"></script>
+<script src="https://www.jsviews.com/download/jsrender.min.js"></script>
+<script>
+    $(function(){
+        $.views.settings.delimiters("((", "))");
+
+        $(document).on("change", "#selector1", function(){
+            var type_seq = $(this).attr("data-val");
+            if(type_seq == 'F'){
+                getSearchList();
+            }else{
+                $(".search-category-list").html("");
+            }
+
+            if(type_seq == 'E'){
+                $(".event-ui").show();
+            }else{
+                 $(".event-ui").hide();
+
+            }
+        })
+    })
+     function getSearchList(){
+        var param = {
+            "page" : "1" ,
+            "page_block": "99",
+            "searchs" : [] ,
+            "table" : "board_type",
+            "sort" : "create_dt asc"
+        }
+        ajaxCallPost(api_server + "getsearchdata", param, function (res) {
+            var template = $.templates("#notice_list_category_list"); // <!-- 템플릿 선언
+            var htmlOutput = template.render(res); // <!-- 렌더링 진행 -->
+            $(".search-category-list").html(htmlOutput);
+        })
+    }
+
+    function addnoticeDetailOhs(){
+        let type_seq = $("#selector1").attr("data-val"); //카테고리
+
+        let faq_type = $("#selector2").attr("data-val"); //FAQ 세부 카테고리
+        faq_type = faq_type ? faq_type : null;
+
+        let start_dt = $('#start_dt').val(); //이벤트시만 노출 기간 시작
+        start_dt = start_dt ? start_dt : null;
+
+        let end_dt = $('#end_dt').val(); //이벤트시만 노출 기간 종료
+        end_dt = end_dt ? end_dt : null;
+
+        let title = $('#title').val(); //공통 제목
+        let content = $('#summernote').summernote('code'); //공통 내용
+
+        let is_push = 'N'; //푸시
+        if ($('#push').is(":checked")) {
+            is_push = 'Y';
+        }
+        let img_url = $('#img_url').val(); //이미지 이벤트 URL
+        img_url = img_url ? img_url : null;
+
+        let img_url_banner = $('#img_url_banner').val(); //이미지 배너 URL
+        img_url_banner = img_url_banner ? img_url_banner : null;
+
+        let img_url_popup = $('#img_url_popup').val(); //이미지 팝업 URL
+        img_url_popup = img_url_popup ? img_url_popup : null;
+
+
+        if(!type_seq){
+            alert("카테고리는 필수입니다.");
+            return;
+        }
+        if(!title){
+            alert("제목은 필수입니다.");
+            return;
+        }
+        if(content && content.trim() == '<p><br></p>'){
+            alert("내용은 필수입니다.");
+            return;
+        }
+
+
+
+        let param = {
+            'type_seq': type_seq,
+            'title': title,
+            'content': content,
+            'is_push': is_push,
+            'img_url_banner': img_url_banner,
+            'img_url_popup': img_url_popup
+        };
+
+        if(type_seq == 'F'){
+            param.faq_type = faq_type;
+            if(!faq_type){
+                alert("FAQ 등록시 FAQ 세부 카테고리는 필수입니다.");
+                return;
+            }
+        }
+
+        if(type_seq == 'E'){
+            param.start_dt = start_dt;
+            param.end_dt = end_dt;
+            param.img_url = img_url;
+
+            if(!img_url){
+                alert("이벤트 등록시 이벤트 대표이미지는 필수입니다.");
+                return;
+            }
+
+            if(!start_dt || !end_dt){
+                alert("이벤트 등록시 이벤트 진행기간은 필수입니다.");
+                return;
+            }
+
+        }
+
+        ajaxCallPost(api_server + "/addboard", param, function(res){
+            if (res.status == 200) {
+                alert("등록이 완료되었습니다.");
+                //location.href = "/notice";
+            }
+        })
+    }
+
+</script>
+
+<script type="text/x-jsrender" id="notice_list_category_list">
+		((for data ))
+            <a class="dropdown-item" onclick="setTextCus('selector2','((:name))', '((:type_seq))');">((:name))</a>
+		((/for ))
+
+</script>
+<div class="row">
+    <div class="col-12 col-md-6 col-lg-6" style=" max-width:100%;flex:100%;margin-top: 50px;">
+        <div class="card">
+            <div class="card-header">
+                <h4>공지/이벤트 등록</h4>
+                <div class="card-header-form" style="margin-top: 10px;">
+
+                </div>
+            </div>
+            <div class="card-body">
+
+                <div class="stock_drop_con">
+
+                    <div style="margin-left: 230px;" class="stock_drop_title">
+                        카테고리
+                    </div>
+                    <div class="dropdown d-inline mr-2">
+                        <button id="selector1" class="btn btn-primary dropdown-toggle" type="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            선택
+                        </button>
+                        <div class="category0 dropdown-menu">
+                            <a class="dropdown-item" onclick="setTextCus2('selector1','공지', 'N'); ">공지</a>
+                            <a class="dropdown-item" onclick="setTextCus2('selector1','이벤트', 'E'); ">이벤트</a>
+                            <a class="dropdown-item" onclick="setTextCus2('selector1','협력업체공지', 'SN'); ">협력업체 공지</a>
+                            <a class="dropdown-item" onclick="setTextCus2('selector1','FAQ', 'F'); ">FAQ</a>
+                        </div>
+                    </div>
+
+                    <div class="stock_drop_title">
+                        FAQ 카테고리
+                    </div>
+                    <div class="dropdown d-inline mr-2 category_info">
+                        <button id="selector2" class="btn btn-primary dropdown-toggle" type="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            선택
+                        </button>
+                        <div class="category0 dropdown-menu search-category-list" id="faqCList">
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <div style="margin-top: 70px;">
+                    <div class="stock_input_con event-ui" style="display:none">
+                        <label class="line_lable">이벤트 대표 이미지 등록</label>
+                        <input type="hidden" id="img_url">
+                        <input style="width:300px" type="file" id="input-image"
+                               class="line_input form-control category_detail_input">
+                    </div>
+                    <div class="stock_input_con event-ui" style="display:none">
+                        <label class="line_lable">이벤트 진행 기간</label>
+                        <input style="width:200px;height: 25px;" type="date" id="start_dt"
+                               class="line_input form-control category_detail_input"> ~
+                        <input style="width:200px;height: 25px;" type="date" id="end_dt"
+                               class="line_input form-control category_detail_input">
+                    </div>
+                    <div class="stock_input_con">
+                        <label class="line_lable">제목</label>
+                        <input style="width:200px;height: 25px;" type="text" id="title"
+                               class="line_input form-control category_detail_input">
+                    </div>
+
+                    <div style="margin: 40px;">
+                        상세 설명 작성
+                    </div>
+                    <div class="form-group row mb-4">
+                        <div class="col-sm-12 col-md-7" style=" max-width:100%;flex:100%;width: 100%;height: 200px;">
+                        <!--<textarea class="summernote-simple"
+                                  style=" max-width:100%;flex:100%;width: 100%;height: 200px;"></textarea>-->
+                            <div id="summernote" class="summernote-simple" style=" max-width:100%;flex:100%;width: 100%;height: 200px;"></div>
+                        </div>
+                    </div>
+
+                    <div style="margin: 40px;">
+                        배너 또는 팝업창 연동 등록
+                    </div>
+                    <div class="stock_input_con">
+                        <label class="line_lable">배너</label>
+                        <input type="hidden" id="img_url_banner">
+                        <input style="width:300px" type="file" id="input-image-banner"
+                               class="line_input form-control category_detail_input">
+                    </div>
+                    <div class="stock_input_con">
+                        <label class="line_lable">팝업</label>
+                        <input type="hidden" id="img_url_popup">
+                        <input style="width:300px" type="file" id="input-image-popup"
+                               class="line_input form-control category_detail_input">
+                    </div>
+
+                    <div class="stock_input_con" style="display:none">
+                        <label class="line_lable">이벤트 노출 기간</label>
+                        <input style="width:200px;height: 25px;" type="date" id="see_start_dt"
+                               class="line_input form-control category_detail_input"> ~
+                        <input style="width:200px;height: 25px;" type="date" id="see_end_dt"
+                               class="line_input form-control category_detail_input">
+                    </div>
+
+                    <div class="stock_input_con">
+                        <label><input type="checkbox" id="push"> PUSH 전송</label>
+                    </div>
+
+                    <div class="hide-sidebar-mini" style="margin: auto;width: 100px;">
+                        <a style="color: #ffffff" onclick="addnoticeDetailOhs();"
+                           class="btn btn-primary btn-lg btn-block btn-icon-split">
+                            등록
+                        </a>
+                    </div>
+                </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+
+    $(document).ready(function() {
+      $('#summernote').summernote();
+    });
+
+    const inputImage = document.getElementById("input-image");
+    document.getElementById("input-image").addEventListener("change", e => {
+        commonFileUpload("input-image", function(filename){
+            $("#img_url").val(api_server+'/static/data/'+filename);
+        })
+    })
+
+    document.getElementById("input-image-banner").addEventListener("change", e => {
+        commonFileUpload("input-image-banner", function(filename){
+            $("#img_url_banner").val(api_server+'/static/data/'+filename);
+        })
+    })
+
+    document.getElementById("input-image-popup").addEventListener("change", e => {
+        commonFileUpload("input-image-popup", function(filename){
+            $("#img_url_popup").val(api_server+'/static/data/'+filename);
+        })
+    })
+    function commonFileUpload(fileId, callback){
+        let file = document.getElementById(fileId).files[0];
+        let extension = file.name.split('.')[1];
+        let filename = generate_token(28) + "." + extension;
+        savefile(file, filename);
+        callback(filename);
+    }
+    //var faqCList = getfaqCList();
+</script>
+{% endblock %}

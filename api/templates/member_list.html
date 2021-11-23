@@ -1,0 +1,103 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-12 col-md-6 col-lg-6" style=" max-width:100%;flex:100%;margin-top: 50px;">
+        <div class="card">
+            <div class="card-header">
+                <h4>멤버 목록</h4>
+                <div class="card-header-form" style="margin-top: 10px;">
+                    <input id="date" type="date" onchange="onDateChangeMember();"
+                           style="margin-top: -1px; padding-left:10px; padding-right:10px;border-radius:30px;float:right;margin-left: 10px;border:1px #cccccc solid;">
+                    <div style="float: right;margin-left: 5px;">
+                        <div class="input-group" style="float: right;">
+                            <input id="keyword" type="text" class="form-control" placeholder="Search">
+                            <div class="input-group-btn">
+                                <button class="btn btn-primary"><i class="fas fa-search"
+                                                                   onclick="onMemberSearchClick();"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dropdown d-inline mr-2" style="float: right;margin-top: -1px">
+                        <button id="selector2" class="btn btn-primary dropdown-toggle" type="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            모두 보기
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" onclick="setmembertype('selector2','모두보기' , 'all');">모두보기</a>
+                            <a class="dropdown-item" onclick="setmembertype('selector2','최고관리자' , 'U');">최고관리자</a>
+                            <a class="dropdown-item" onclick="setmembertype('selector2','관리자' , 'A');">관리자</a>
+                            <a class="dropdown-item" onclick="setmembertype('selector2','상담사' , 'C');">상담사</a>
+                        </div>
+                    </div>
+<!--                    <div class="dropdown d-inline mr-2" style="float: right;margin-top: -1px">-->
+                    <!--                        <button id="selector1" class="btn btn-primary dropdown-toggle" type="button"-->
+                    <!--                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
+                    <!--                            모두 보기-->
+                    <!--                        </button>-->
+                    <!--                        <div class="dropdown-menu" style="display: none">-->
+                    <!--                            <a class="dropdown-item" onclick="setText('selector1','모두보기'); ">모두 보기</a>-->
+                    <!--                            <a class="dropdown-item" onclick="setText('selector1','사용'); ">사용</a>-->
+                    <!--                            <a class="dropdown-item" onclick="setText('selector1','중지'); ">중지</a>-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
+
+                    <div class="hide-sidebar-mini" style="margin-right: 20px;float: right;width: 100px;">
+                        <a href="/member_add" class="btn btn-primary btn-lg btn-block btn-icon-split">
+                            등록
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="log_table" class="table table-bordered table-md" style="font-weight: normal">
+                        <tr>
+                            <th>계정유형</th>
+                            <th>ID</th>
+                            <th>사용자</th>
+                            <th>휴대폰번호</th>
+                            <th>등록일시</th>
+                            <th>휴대폰 주문 알림 수신</th>
+                            <th>정산 알림 수신</th>
+                            <th>상태</th>
+                            <th>비밀번호 재설정</th>
+                        </tr>
+
+                    </table>
+                </div>
+            </div>
+            <div class="card-footer text-right">
+                <nav class="d-inline-block">
+                    <ul id="page" class="pagination mb-0">
+
+
+                    </ul>
+                </nav>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+
+    var members = getmember();
+    var member = [];
+    for (let i = 0; i < members.length; i++) {
+        if (members[i]['member_type'] != 'S' && members[i]['member_type'] != 'M' && !isEmpty(members[i]['member_type'])) {
+            member.push(members[i]);
+        }
+    }
+    console.log(member);
+    member.reverse();
+    membermanagestart(member);
+    setmember_list(member, 1);
+
+    document.getElementById("maintitle").innerHTML = "멤버 관리";
+</script>
+{% endblock %}
+
+<!--
+    setproduct(getnotice);-->

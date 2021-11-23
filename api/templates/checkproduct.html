@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
+    <title>Blank Page &mdash; Stisla</title>
+
+    <!-- General CSS Files -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+          integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.min.js"></script>
+    <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <!-- CSS Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+    <script type="text/javascript" src="jscript/graph.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript" src="../static/js/main.js?v={{v}}"></script>
+    <script type="text/javascript" src="../static/js/api.js?v={{v}}"></script>
+    <script type="text/javascript" src="../static/js/review.js?v={{v}}"></script>
+    <script type="text/javascript" src="../static/js/jay02.js?v={{v}}"></script>
+    <!-- Template CSS -->
+    <link rel="stylesheet" href="../static/css/style.css?v={{v}}">
+    <link rel="stylesheet" href="../static/css/components.css">
+    <!-- include summernote css/js-->
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.css" rel="stylesheet">
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+
+    <script src="https://www.jsviews.com/download/jsrender.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsrender/1.0.11/jsrender.min.js"></script>
+
+</head>
+<script>
+    // var api_server = "http://localhost:5222/";
+    var api_server = "http://teambox.kr:5222/";
+</script>
+<body style="background: #ffffff">
+
+<h3 style="margin: 30px 30px 0 30px;">
+    재고가 부족한 구입 항목이 있습니다.
+    처리 방법을 선택해 주세요
+</h3>
+
+<div id="tables">
+
+
+</div>
+<div>
+    <div class="hide-sidebar-mini" style="margin: auto;width: 100px;">
+        <a style="color: #ffffff"
+           class="selectproduct btn btn-primary btn-lg btn-block btn-icon-split">
+            선택
+        </a>
+    </div>
+</div>
+<script>
+    //     카테고리
+    //
+    // 세부 카테고리
+    //
+    //
+    // 상품 번호
+    //
+    //
+    // 상품명
+    //
+    //
+    // 부족 수량
+    //
+    //
+    // 처리 방법
+    //
+    //
+    // 시공 /      단순 전달
+
+    var qs = getQueryStringObject();
+    var sort = qs.sort;
+    let table = document.getElementsByClassName('table')[0];
+    var tablehtml = getPage('/item/table.html');
+    let tables = getid('tables');
+    let map = JSON.parse(sessionStorage.getItem('productmap'));
+    let categoryinfo1 = getallcategoryinfo();
+    let infos = Object.keys(map);
+    console.log(map);
+    for (let i = 0; i < infos.length; i++) {
+        let info_seq = infos[i];
+        let infoitem = map[info_seq];
+        let products = Object.keys(infoitem);
+
+        let tablediv = document.createElement('div');
+        tablediv.innerHTML = tablehtml;
+        let table = tablediv.getElementsByClassName('table')[0];
+
+        let tabletitle = tablediv.getElementsByClassName('tabletitle')[0];
+        for (let i = 0; i < categoryinfo1.length; i++) {
+            if (info_seq == categoryinfo1[i]['info_seq']) {
+                tabletitle.innerHTML = categoryinfo1[i]['name'];
+
+            }
+        }
+
+        for (let j = 0; j < products.length; j++) {
+            let product_seq = products[j];
+            let productobject = infoitem[products[j]];
+            var product = getoneproduct(product_seq)[0];
+            let item = document.createElement("tr");
+            let category = document.createElement("td");
+            let categorydetail = document.createElement("td");
+            let number = document.createElement("td");
+            let name = document.createElement("td");
+            let lack = document.createElement("td");
+            let act = document.createElement("td");
+            let act2 = document.createElement("td");
+            item.classList.add('product');
+            categorydetail.innerHTML = product['category_info_detail.name'];
+            number.innerHTML = product['product_seq'];
+            name.innerHTML = product['name'];
+            lack.innerHTML = productobject['lack'];
+            let check1 = document.createElement('input');
+            check1.type = "radio";
+            check1.name = product_seq;
+            check1.checked = 'true';
+            act.append(check1);
+            let check2 = document.createElement('input');
+            check2.type = "radio";
+            check2.name = product_seq;
+            act2.append(check2);
+            item.append(number);
+            item.append(category);
+            item.append(categorydetail);
+            item.append(name);
+            item.append(lack);
+            item.append(act);
+            item.append(act2);
+            table.appendChild(item);
+        }
+        tables.append(tablediv);
+    }
+
+
+    let selectproduct = document.getElementsByClassName('selectproduct')[0];
+    selectproduct.onclick = function () {
+        let productitem = document.getElementsByClassName('product');
+        let lackact = new Object();
+        let countmap = new Object();
+        for (let i = 0; i < productitem.length; i++) {
+            let item = productitem[i];
+            let check = item.getElementsByTagName('td')[5];
+            let number = item.getElementsByTagName('td')[0].innerHTML;
+            let lack = item.getElementsByTagName('td')[4].innerHTML;
+            let istrans = check.getElementsByTagName('input')[0].checked ? 'trans' : 'minus';
+            lackact[number] = istrans;
+            countmap[number] = lack;
+        }
+        sessionStorage.setItem('lackact', JSON.stringify(lackact));
+
+        if (sort == 'write') {
+
+            window.opener.afterstockcheck(JSON.stringify(lackact), JSON.stringify(countmap));
+        }
+        if (sort == 'edit') {
+            window.opener.afterstockcheckedit(JSON.stringify(lackact), JSON.stringify(countmap));
+        }
+
+        window.close();
+
+
+    }
+</script>
+</body>
+</html>

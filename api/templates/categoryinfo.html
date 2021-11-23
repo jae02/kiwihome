@@ -1,0 +1,57 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+<div class="dropdown d-inline mr-2" style="margin-top: -1px">
+
+    <div class="card">
+
+        <div class="card-body">
+            <div class="table-responsive" style="width: 600px;">
+                <table id="log_table" class="table table-bordered table-md" style="font-weight: normal">
+                    <!--                        2020-12-13 10:51:55 AM 상담사1 가견적 등록-->
+
+                    <tr>
+                        <th>순번</th>
+                        <th>이름</th>
+                        <th>생성 날짜</th>
+                        <th>삭제</th>
+                    </tr>
+
+                </table>
+            </div>
+
+        </div>
+
+        <div>
+            <div style=" display: flex;">
+                <label class="line_lable"
+                       style=" width:50px;margin:5px 0 0 20px;width:100px;color: #222222;font-weight: 700">
+                    하위 카테고리 추가</label>
+                <input id="ci_name" placeholder="이름" type="text"
+                       class="line_input form-control">
+            </div>
+        </div>
+        <img class="img_mt_add" style="margin:30px 30px;width: 30px; height: 30px;" onclick="addcategoryDetail1()"
+             src="../static/image/add.png"/>
+    </div>
+</div>
+
+
+<script>
+    var qs = getQueryStringObject();
+    var categoryinfo = getallcategoryinfo();
+    var info_seq = qs.info_seq;
+    var categorydetail = getcategorydetail(info_seq);
+    startcategoryinfo(categorydetail);
+
+    let title = '';
+    for (let i = 0; i < categoryinfo.length; i++) {
+        if (info_seq == categoryinfo[i]['info_seq']) {
+            title = categoryinfo[i]['name'];
+        }
+    }
+    document.getElementById("maintitle").innerHTML = title + " 관리";
+
+</script>
+{% endblock %}

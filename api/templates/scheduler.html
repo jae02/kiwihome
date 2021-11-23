@@ -1,0 +1,124 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<html>
+<head>
+    <meta charset='utf-8'/>
+    <link href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/core/main.min.css' rel='stylesheet'/>
+    <link href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/daygrid/main.min.css' rel='stylesheet'/>
+    <link href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/timegrid/main.min.css' rel='stylesheet'/>
+    <link href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/list/main.min.css' rel='stylesheet'/>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/core/main.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/interaction/main.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/daygrid/main.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/timegrid/main.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/list/main.min.js'></script>
+
+    <style>
+        html, body {
+            font-size: 14px;
+            background: #e2e2e2;
+        }
+
+        input {
+            text-align: right;
+            margin-left: 5px;
+        }
+
+        #calendar {
+            width: 80%;
+            margin-left: 100px;
+            box-shadow: 0px 0px 10px #000;
+            padding: 15px;
+            background: #fff;
+        }
+
+        #calendar-container {
+            text-align: center;
+            left: 10%;
+            right: 10%;
+            bottom: 20%;
+        }
+
+        .label1 {
+            display: inline-block;
+            width: 87px;
+        }
+
+        #continer {
+            margin-left: 8%;
+        }
+
+        select {
+            margin-left: 10px;
+        }
+
+        .fc-today-button {
+            display: none;
+        }
+
+        .fc-addEventButton-button {
+            display: none;
+        }
+
+        .fc-title {
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+<div id='calendar-container'>
+    <h1></h1>
+    <div id='calendar'></div>
+</div>
+<div id="continer">
+    <div id="hope_date">
+        <span>희망일: </span>
+        <input type="date" id="start_date" readonly>
+        <input type="date" id="end_date" readonly>
+    </div>
+</div>
+<div style="text-align: center;">
+    <button style="width: 80px; height: 60px;transform: translateY(-9px);" onclick="sendnotiall()">협력업체 일괄전송</button>
+
+    <button style="width: 80px; height: 60px;" onclick="history.back();">확인</button>
+
+</div>
+
+<script>
+
+    var calendar = '';
+    document.addEventListener('DOMContentLoaded', function () {
+        var calendarEl = document.getElementById('calendar');
+
+        calendar = new FullCalendar.Calendar(calendarEl, {
+            plugins: ['interaction', 'dayGrid', 'timeGrid', 'list'],
+            header: {
+                center: 'addEventButton'
+            },
+            customButtons: {
+                addEventButton: {
+                    text: 'add event...',
+                    click: function () {
+                        aa();
+                    }
+                }
+            }
+        });
+
+        calendar.render();
+    });
+
+
+    var trans = getEstimate1();
+    var category_info1 = getcategoryinfo1();
+    var categoryinfo = getallcategoryinfo();
+    var storejob = getstorejob();
+    var stores = getstore();
+    setTimeout(function () {
+        print_schedule(category_info1, trans);
+    }, 400);
+</script>
+</body>
+</html>
+{% endblock %}

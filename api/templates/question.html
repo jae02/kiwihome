@@ -1,0 +1,125 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<div class="mt-4 mb-4 p-3 hide-sidebar-mini"
+     style="position: fixed ; right: 30px ; bottom: 30px; z-index: 20;">
+    <a class="btn btn-primary btn-lg btn-block btn-icon-split" style="color: #ffffff" onclick="addquestionclick();">
+        질문 추가하기
+    </a>
+</div>
+<div class="row">
+    <div class="col-12 col-md-6 col-lg-6" style=" max-width:100%;flex:100%;margin-top: 50px;">
+        <div class="card">
+            <div class="card-header">
+                <h4>입력 정보 관리</h4>
+                <div class="card-header-form" style="margin-top: 10px;">
+
+                </div>
+            </div>
+            <div class="card-body">
+
+                <div class="stock_drop_con">
+
+                    <div class="dropdown d-inline mr-2">
+                        <button id="selector1" class="btn btn-primary dropdown-toggle" type="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            선택
+                        </button>
+                        <div class="category0 dropdown-menu">
+                            <!--                            <a class="dropdown-item" onclick="setText('selector1','선택');">선택</a>-->
+                            <!--                            <a class="dropdown-item" onclick="setText('selector1','자재');">자재</a>-->
+                            <!--                            <a class="dropdown-item" onclick="setText('selector1','물품');">물품</a>-->
+                        </div>
+                    </div>
+
+                    <div class="dropdown d-inline mr-2 category_info">
+                        <button id="selector2" class="btn btn-primary dropdown-toggle" type="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            선택
+                        </button>
+                        <div class="category0 dropdown-menu">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive" style="min-height: 400px;">
+                    <table id="log_table" style="margin-top: 50px;" class="table table-bordered table-md">
+                        <tr>
+                            <th>순번</th>
+                            <th>질문</th>
+                            <th>답변 도움말(예시)/수식</th>
+                            <th>단위</th>
+                            <th>질문 요약</th>
+                            <th>답변 유형</th>
+                            <th>도움 예시 이미지 표시</th>
+                            <th>고객 견적 노출 금지</th>
+                            <th>파트너 노출 금지</th>
+                            <th>간단 견적 노출</th>
+                            <th>삭제</th>
+                        </tr>
+
+
+                    </table>
+                </div>
+
+                <div class="table-responsive" style="min-height: 400px;">
+                    <table style="margin-top: 50px;" class="table table-bordered table-md">
+                        <tr>
+                            <th>질문</th>
+                            <th>답변 도움말(예시)/수식</th>
+                            <th>단위</th>
+                            <th>질문 요약</th>
+                            <th>답변 유형</th>
+
+                            <th>고객 견적 노출 금지</th>
+                            <th>파트너 노출 금지</th>
+                            <th>간단 견적 노출</th>
+
+                        </tr>
+
+                        <tr class="questionadd">
+                            <th><input type="text"/></th>
+                            <th><input type="text"/></th>
+                            <th><input type="text"/></th>
+                            <th></th>
+                            <th></th>
+
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+
+
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+    sessionStorage.setItem("addcatede", 0);
+
+
+    document.getElementById("maintitle").innerHTML = "입력 정보 관리";
+    sessionStorage.setItem("category_info", -1);
+    var selectedsummary = -1;
+    var selectedcodi = -1;
+    var summary = getsummary();
+    getcodi();
+    var category = getCategory();
+    setCategory_question(category);
+    startQuestion();
+</script>
+{% endblock %}
+
+<!--<div class="dropdown d-inline mr-2">-->
+<!--                      <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
+<!--                        선택-->
+<!--                      </button>-->
+<!--                      <div class="dropdown-menu">-->
+<!--                        <a class="dropdown-item" href="#">Action</a>-->
+<!--                        <a class="dropdown-item" href="#">Another action</a>-->
+<!--                        <a class="dropdown-item" href="#">Something else here</a>-->
+<!--                      </div>-->
+<!--                    </div>-->

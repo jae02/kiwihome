@@ -1,0 +1,175 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-12 col-md-6 col-lg-6" style=" max-width:100%;flex:100%;margin-top: 50px;">
+        <div class="card">
+            <div class="card-header">
+                <h4>물품 수정</h4>
+                <div class="card-header-form" style="margin-top: 10px;">
+
+                </div>
+            </div>
+            <div class="card-body">
+
+                <div class="stock_drop_con">
+
+                    <div style="margin-left: 230px;" class="stock_drop_title">
+                        카테고리
+                    </div>
+                    <div class="dropdown d-inline mr-2">
+                        <button id="selector1" class="btn btn-primary dropdown-toggle" type="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            선택
+                        </button>
+                        <div class="category0 dropdown-menu"></div>
+                    </div>
+
+                    <div class="stock_drop_title">
+                        세부 카테고리
+                    </div>
+                    <div class="dropdown d-inline mr-2 category_info">
+                        <button id="selector2" class="btn btn-primary dropdown-toggle" type="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            선택
+                        </button>
+                        <div class="category0 dropdown-menu"></div>
+                    </div>
+
+                    <div class="stock_drop_title">
+                        하위 카테고리
+                    </div>
+                    <div class="dropdown d-inline mr-2">
+                        <button id="selector3" class="btn btn-primary dropdown-toggle" type="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            선택
+                        </button>
+                        <div class="category0 dropdown-menu"></div>
+                    </div>
+
+
+                </div>
+
+                <div style="margin-top: 70px;">
+                    <div class="stock_input_con">
+                        <label class="line_lable">상품명</label>
+                        <div class="name"></div>
+                    </div>
+                    <div class="stock_input_con">
+                        <label class="line_lable">판매가</label>
+                        <div class="price"></div>
+                    </div>
+                    <div class="stock_input_con">
+                        <label class="line_lable">업체 전송<br>판매가</label>
+                        <div class="store_price"></div>
+                    </div>
+                    <div class="stock_input_con">
+                        <label class="line_lable">재고 개수</label>
+                        <div class="stock"></div>
+                    </div>
+
+                    <div class="stock_input_con"
+                         style="margin-top: 30px; margin-bottom: 30px; color: #222222; font-weight: 700">
+                        대표사진 업로드
+                    </div>
+                    <div class="stock_input_con">
+
+                        <div class="image-container">
+                            <img style="width: 200px; height: 200px; border: #888888 1px solid" id="preview-image"
+                                 src=""
+                                 onerror="this.src='https://dummyimage.com/500x500/ffffff/000000.png&text=preview+image'">
+                            <input style="display: none;" type="file" id="input-image">
+                        </div>
+                    </div>
+
+
+                    <div style="margin: 40px;">
+
+                        상세 설명 작성
+                    </div>
+                    <div class="form-group row mb-4">
+                        <div class="col-sm-12 col-md-7" style=" max-width:100%;flex:100%;width: 100%;height: 200px;">
+                            <div class="content"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="hide-sidebar-mini" style="margin: auto;width: 100px;">
+                            <a style="color: #ffffff"
+                               class="btn btn-primary btn-lg btn-block btn-icon-split go-detail-btn">
+                                수정
+                            </a>
+                            <a style="color: #ffffff"
+                               class="btn btn-primary btn-lg btn-block btn-icon-split go-delete-btn">
+                                삭제
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+
+
+        let qs = getQueryStringObject();
+        var product_seq = qs.seq;
+        var gproduct_category = "";
+
+        var param = {}
+        ajaxCallPost(api_server + "getproduct", param, function (res) {
+            var productObj = null;
+            for (var i = 0; i < res.data.length; i++) {
+                if (res.data[i]['product_seq'] == product_seq) {
+                    productObj = res.data[i];
+                }
+            }
+
+            if (productObj != null) {
+                $(".name").text(productObj.name);
+                $(".price").text(productObj.price);
+                $(".store_price").text(productObj.store_price);
+                $(".stock").text(productObj.stock);
+                $(".content").html(productObj.content);
+                $("#preview-image").attr("src", productObj.img_url);
+                gproduct_category = productObj.product_category;
+            }
+        })
+
+        $(".go-detail-btn").click(function () {
+            if (confirm("수정하시겠습니까?")) {
+                location.href = "/stock_update?seq=" + product_seq;
+            }
+        })
+        $(".go-delete-btn").click(function () {
+            var param = {
+                "tablename": "product",
+                "wherecolumn": "product_seq",
+                "wherevalue": product_seq,
+                "category": gproduct_category
+            }
+            if (confirm("삭제하시겠습니까?")) {
+                ajaxCallPost(api_server + "deleterow", param, function (res) {
+                    if (res.status == 200) {
+                        alert("삭제가 완료되었습니다.");
+                        //location.href="/stock";
+                    }
+                })
+            }
+        })
+    })
+
+</script>
+<script>
+    sessionStorage.setItem("addcatede", 0);
+    document.getElementById("maintitle").innerHTML = "물품 등록";
+
+    var category = getCategory();
+    setCategory_add(category);
+
+</script>
+{% endblock %}

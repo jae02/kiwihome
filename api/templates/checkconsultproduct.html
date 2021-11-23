@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
+    <title>Blank Page &mdash; Stisla</title>
+
+    <!-- General CSS Files -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+          integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.min.js"></script>
+    <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <!-- CSS Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+    <script type="text/javascript" src="jscript/graph.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript" src="../static/js/main.js?v={{v}}"></script>
+    <script type="text/javascript" src="../static/js/api.js?v={{v}}"></script>
+    <script type="text/javascript" src="../static/js/review.js?v={{v}}"></script>
+    <script type="text/javascript" src="../static/js/jay02.js?v={{v}}"></script>
+    <!-- Template CSS -->
+    <link rel="stylesheet" href="../static/css/style.css?v={{v}}">
+    <link rel="stylesheet" href="../static/css/components.css">
+    <!-- include summernote css/js-->
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.css" rel="stylesheet">
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+
+    <script src="https://www.jsviews.com/download/jsrender.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsrender/1.0.11/jsrender.min.js"></script>
+
+</head>
+<script>
+    // var api_server = "http://localhost:5222/";
+    var api_server = "http://teambox.kr:5222/";
+</script>
+<body style="background: #ffffff">
+<div id="tables">
+
+
+</div>
+<div>
+    <div class="hide-sidebar-mini" style="margin: auto;width: 100px;">
+        <a style="color: #ffffff"
+           class="close btn btn-primary btn-lg btn-block btn-icon-split">
+            확인
+        </a>
+    </div>
+</div>
+<script>
+    var qs = getQueryStringObject();
+    var seq = qs.seq;
+    var jobs = getonejob(seq);
+    var categoryinfo = getallcategoryinfo();
+    let table = document.getElementsByClassName('table')[0];
+    var tablehtml = getPage('/item/table1.html');
+    var categories = getCategory();
+    let tables = getid('tables');
+
+    for (let i = 0; i < jobs.length; i++) {
+        let tablediv = document.createElement('div');
+        tablediv.innerHTML = tablehtml;
+        let table = tablediv.getElementsByClassName('table')[0];
+        let tabletitle = tablediv.getElementsByClassName('tabletitle')[0];
+        let products = getjobproduct(jobs[i]['job_seq']);
+        for (let j = 0; j < categoryinfo.length; j++) {
+            if (categoryinfo[j]['info_seq'] == jobs[i]['info_seq']) {
+                tabletitle.innerHTML = categoryinfo[i]['name'];
+
+            }
+        }
+        for (let j = 0; j < products.length; j++) {
+            var product = products[j];
+            let item = document.createElement("tr");
+            let category = document.createElement("td");
+            let categoryinfo1 = document.createElement("td");
+            let num = document.createElement("td");
+            let name = document.createElement("td");
+            let count = document.createElement("td");
+            let kiwi = document.createElement("td");
+            let kiwiout = document.createElement("td");
+            let storecount = document.createElement("td");
+            let type = document.createElement("td");
+
+            for (let k = 0; k < categories.length; k++) {
+                if (categories[k]['category_seq'] == product['category_seq']) {
+                    category.innerHTML = categories[k]['name'];
+                }
+            }
+            for (let k = 0; k < categoryinfo.length; k++) {
+                if (categoryinfo[k]['info_seq'] == product['info_seq']) {
+                    categoryinfo1.innerHTML = categoryinfo[k]['name'];
+                }
+            }
+            num.innerHTML = product['product_seq'];
+            name.innerHTML = product['name'];
+            count.innerHTML = product['order_cnt'];
+            kiwi.innerHTML = product['kiwihome_stock'];
+            kiwiout.innerHTML = product['kiwihome_out_stock'];
+            storecount.innerHTML = product['store_stock'];
+            type.innerHTML = product['construction_type'] == 'T' ? '단순 전달' : '시공';
+
+            item.append(category);
+            item.append(categoryinfo1);
+            item.append(num);
+            item.append(name);
+            item.append(count);
+            item.append(kiwi);
+            item.append(kiwiout);
+            item.append(storecount);
+            item.append(type);
+            table.appendChild(item);
+        }
+        tables.append(tablediv);
+
+    }
+
+    document.getElementsByClassName('close')[0].onclick = function () {
+        window.close();
+    }
+</script>
+</body>
+</html>

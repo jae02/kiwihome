@@ -1,0 +1,131 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<script type="text/javascript" src="../static/js/store.js?v={{v}}"></script>
+<div class="row">
+    <div class="col-12 col-md-6 col-lg-6" style=" max-width:100%;flex:100%;margin-top: 50px;">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-header-form" style="margin-top: 10px; margin-left :800px;">
+                    <input type="date"
+                           style="margin-top: -1px; padding-left:10px; padding-right:10px;border-radius:30px;float:right;margin-left: 10px;border:1px #cccccc solid;">
+                    <form style="float: right;margin-left: 5px;">
+                        <div class="input-group" style="float: right;">
+                            <input type="text" class="form-control" placeholder="Search">
+                            <div class="input-group-btn">
+                                <button class="btn btn-primary"><i class="fas fa-search"></i></button>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="dropdown d-inline mr-2" style="float: right;margin-top: -1px">
+                        <button id="selector1" class="btn btn-primary dropdown-toggle" type="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            모두 보기
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" onclick="setText('selector1','모두 보기'); ">모두 보기</a>
+                            <a class="dropdown-item" onclick="setText('selector1','욕실'); ">욕실</a>
+                            <a class="dropdown-item" onclick="setText('selector1','벽지'); ">벽지</a>
+                        </div>
+                    </div>
+                    <div class="dropdown d-inline mr-2" style="float: right;margin-top: -1px">
+                        <button id="selector2" class="btn btn-primary dropdown-toggle" type="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            모두 보기
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" onclick="setText('selector2','모두 보기');">모두보기</a>
+                            <a class="dropdown-item" onclick="setText('selector2','진행');">인테리어</a>
+                            <a class="dropdown-item" onclick="setText('selector2','완료');">수리</a>
+                            <a class="dropdown-item" onclick="setText('selector2','완료');">설치</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="log_table" class="table table-bordered table-md" style="font-weight: normal">
+                        <tr>
+                            <th>아이디</th>
+                            <th>이름</th>
+                            <th>업체명</th>
+                            <th>전화번호</th>
+                            <th>주소</th>
+                            <th>가입일</th>
+                            <th>별점</th>
+                            <th>전체작업횟수</th>
+                            <th>미정산시공비</th>
+                            <th>메세지</th>
+                            <th>삭제</th>
+                            <th>재가입 불가 삭제</th>
+                        </tr>
+
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="log_table2" class="table table-bordered table-md" style="font-weight: normal">
+                        <tr>
+                            <th>선택</th>
+                            <th>작업기록</th>
+                            <th>작업기간</th>
+                            <th>식별번호</th>
+                            <th>작업내용</th>
+                            <th>시공비</th>
+                            <th>별점</th>
+                            <th>주소</th>
+                            <th>시공비 정산 여부</th>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+</div>
+
+        <div class="table-responsive">
+            <table id="log_table3" class="table table-bordered table-md" style="font-weight: normal">
+                <tr>
+                    <th>사업자 등록증</th>
+                    <th>작업 거부 횟수</th>
+                    <th>미정산 시공비</th>
+                    <th>미정산 작업 수</th>
+                    <th>마지막 정산일</th>
+                    <th>정산</th>
+                    <th>전체 정산 기록</th>
+                    <th>전체 시공비</th>
+                    <th>전체 작업 횟수</th>
+                </tr>
+            </table>
+        </div>
+
+<script>
+function getParameter(name) {
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        results = regex.exec(location.search);
+    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
+
+    var product = getstoredetaildata(getParameter("seq"));
+    setstoremaindata(product);
+
+    var product2 = getstoredetaildata2(getParameter("seq"));
+    setstoredetaildata(product2);
+
+    var product3 = getstoredetaildata3(getParameter("seq"));
+    setstoredetaildata2(product3);
+    document.getElementById("maintitle").innerHTML = "협력 업체 관리";
+
+
+
+</script>
+{% endblock %}

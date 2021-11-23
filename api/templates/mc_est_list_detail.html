@@ -1,0 +1,227 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-12 col-md-6 col-lg-6" style=" max-width:100%;flex:100%;margin-top: 50px;">
+        <div class="card">
+            <div class="card-header">
+                <h4>인테리어 견적 상세</h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-md" style="font-weight: normal">
+                        <tr>
+
+                            <th>순번</th>
+                            <th>작성 일시</th>
+                            <th>채널</th>
+                            <th>관리 번호</th>
+                            <th>고객명</th>
+                            <th>연락처</th>
+                            <th>주소</th>
+                            <th>작업</th>
+                            <th>담당자</th>
+                            <th>상태</th>
+                            <th>메세지</th>
+                        </tr>
+                        <tr id="consultingdetail">
+
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+
+
+                    </table>
+                </div>
+
+
+            </div>
+            <div class="card-header">
+                <h4>작업 일정 정하기</h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="jobtable table table-bordered table-md" style="font-weight: normal">
+                        <tr>
+                            <th>작업</th>
+                            <th>시공비</th>
+                            <th>물품 구입비</th>
+                            <th>물품 준비</th>
+                            <th>작업일수</th>
+                            <th>협력업체 검색</th>
+                            <th>협력업체명</th>
+                            <th>일정 상태</th>
+                            <th>일정 확정</th>
+                            <!--                            <th>확정 취소</th>-->
+                            <th>메세지</th>
+                        </tr>
+
+
+                    </table>
+                </div>
+
+                <div class="card" style="box-shadow : 0 0 0 #ffffff ;">
+                    <div class="card-body" style="padding:  0;">
+                        <div class="form-group" style="margin-bottom: 5px;width: 35%;">
+                            <label>실견적</label>
+                            <div class=" mb-4  hide-sidebar-mini"
+                                 style="width:1000px;height: 30px; margin: 0px;margin-top: 5px;">
+                                <a
+
+                                        style=" padding:5px;width: 130px;float: left;  background-color :#ffffff ; border-color : #888888;color: #888888"
+                                        class="edit btn btn-lg ">
+                                    수정
+                                </a>
+                                <a
+                                        style=" padding:5px;width: 130px;float: left; margin-top: 0px; margin-left: 20px; color: #ffffff"
+                                        class="seeestimate btn btn-primary btn-lg btn-block btn-icon-split">
+                                    실견적서 보기
+                                </a>
+                            </div>
+
+                        </div>
+                        <div class="form-group" style="margin-bottom: 5px;width: 100%;">
+                            <label>총 금액</label>
+                            <input type="text" class="detailinput form-control invoice-input"
+                                   style="height: 30px;width: 200px;"
+                                   readonly>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 5px;width: 100%;">
+                            <label>계약금</label>
+                            <input type="text" class="detailinput form-control invoice-input"
+                                   style="height: 30px;width: 200px;"
+                                   readonly>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 5px;width: 100%;">
+                            <label style="display: block">선금</label>
+                            <input type="text" class="detailinput form-control invoice-input"
+                                   style="height: 30px;float:left; width: 200px;" readonly>
+                            <a style="margin-left:20px;float:left;padding:1px;width: 130px;float: left;  background-color :#ffffff ; border-color : #888888;color: #222222"
+                               class="sendestimate btn btn-lg">
+                                전송
+                            </a>
+                            <a style=" margin-left:5px;float:left;padding:1px;width: 130px;float: left;  background-color :#ffffff ; border-color : #888888;color: #222222"
+                               class="isstartpayment btn btn-lg ">
+                                입금 대기
+                            </a>
+                            <div class="dropdown d-inline mr-2"
+                                 style=" padding:0px;margin-left:5px;float: left;margin-top: -1px">
+                                <button style="padding:1px 15px" class="btn btn-primary dropdown-toggle" type="button"
+                                        id="starttext"
+
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    미발급
+                                </button>
+                                <div class="dropdown-menu">
+
+
+                                    <a class="dropdown-item" onclick="selectpaymethod('start_payment_proof' , 'N' );">미발급</a>
+                                    <a class="dropdown-item" onclick="selectpaymethod('start_payment_proof' , 'C' );">현금영수증</a>
+                                    <a class="dropdown-item" onclick="selectpaymethod('start_payment_proof' , 'T' );">세금계산서</a>
+                                    <a class="dropdown-item" onclick="selectpaymethod('start_payment_proof' , 'R' );">카드-미발급</a>
+                                </div>
+                            </div>
+                            <div id="start_pay" style="float: left;">
+
+                            </div>
+
+                        </div>
+                        <div class="form-group" style="margin-top:50px;margin-bottom: 5px;width: 100%;">
+                            <label style="display: block">잔금</label>
+                            <input type="text" class="detailinput form-control invoice-input"
+                                   style="height: 30px;float:left; width: 200px;" readonly>
+                            <a style=" margin-left:20px;float:left;padding:1px;width: 130px;float: left;  background-color :#ffffff ; border-color : #888888;color: #222222"
+                               class="sendestimate btn btn-lg ">
+                                전송
+                            </a>
+                            <a style=" margin-left:5px;float:left;padding:1px;width: 130px;float: left;  background-color :#ffffff ; border-color : #888888;color: #222222"
+                               class="isendpayment btn btn-lg ">
+                                입금 대기
+                            </a>
+                            <div class="dropdown d-inline mr-2"
+                                 style=" padding:0px;margin-left:5px;float: left;margin-top: -1px">
+                                <button style="padding:1px 15px" class="btn btn-primary dropdown-toggle" type="button"
+                                        id="endtext"
+
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    미발급
+                                </button>
+                                <div class="dropdown-menu">
+
+                                    <a class="dropdown-item"
+                                       onclick="selectpaymethod('end_payment_proof' , 'N' );">미발급</a>
+                                    <a class="dropdown-item" onclick="selectpaymethod('end_payment_proof' , 'C' );">현금영수증</a>
+                                    <a class="dropdown-item" onclick="selectpaymethod('end_payment_proof' , 'T' );">세금계산서</a>
+                                    <a class="dropdown-item" onclick="selectpaymethod('end_payment_proof' , 'R' );">카드-미발급</a>
+
+                                </div>
+                            </div>
+                            <div id="end_pay" style="float: left;">
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="card-header">
+                <h4>내역 보기</h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive" style="width: 600px;">
+                    <table class="historytable table table-bordered table-md" style="font-weight: normal">
+                        <!--                        2020-12-13 10:51:55 AM 상담사1 가견적 등록-->
+                        <tr>
+                            <th>일자</th>
+                            <th>담당자</th>
+                            <th>내용</th>
+                        </tr>
+
+                    </table>
+                </div>
+                <a style=" padding:5px;width: 130px;float: left;  background-color :#ffffff ; border-color : #888888;color: #888888"
+                   class="btn btn-lg ">
+                    취소
+                </a>
+                <a style=" margin-left:20px;padding:5px;width: 130px;float: left;  background-color :#ffffff ; border-color : #888888;color: #888888"
+                   class="confirmall btn btn-lg ">
+                    완료
+                </a>
+                <a style=" margin-left:20px;padding:5px;width: 130px;float: left;  background-color :#ffffff ; border-color : #888888;color: #888888"
+                   class="confirm btn btn-lg ">
+                    확인
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var cate = '1';
+    let qs = getQueryStringObject();
+    var category_seq = qs.seq;
+    var members = getmember();
+    var categoryinfos = getcategoryinfo2('2');
+    var store = getstore();
+    var questions = getallquestion();
+    var consultingdetail = getconsultingdetail();
+    var jobs = getjob();
+    setDetailDataMove(category_seq);
+    loadhistory(category_seq);
+    loadrealconsultingmove();
+    document.getElementById("maintitle").innerHTML = "이사/입주청소 견적 상세";
+</script>
+{% endblock %}

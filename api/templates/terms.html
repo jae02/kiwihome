@@ -1,0 +1,70 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-12 col-md-6 col-lg-6" style=" max-width:100%;flex:100%;margin-top: 50px;">
+        <div class="card">
+            <div class="card-header">
+                <h4>약관 목록</h4>
+            </div>
+            <div class="card-body" style="width: 50%; text-align: center;margin:50px auto;">
+                <div class="table-responsive">
+                    <table id="terms" class="table table-bordered table-md" style="font-weight: normal">
+                        <tr>
+                            <th>등록일</th>
+                            <th>제목</th>
+                            <th>수정일</th>
+                        </tr>
+
+
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+
+    document.getElementById("maintitle").innerHTML = "약관 목록";
+
+
+    $.ajax({
+        type: "POST",
+        url: api_server + "getterms",
+        data: null,
+        processData: false,
+        contentType: false,
+        success: function (data1) {
+            let data = data1.data;
+            var table = document.getElementById('terms');
+            for (let i = 0; i < data.length; i++) {
+                let itemtr = document.createElement('tr');
+                let item_create_dt = document.createElement('td');
+                let item_title = document.createElement('td');
+                let item_update_dt = document.createElement('td');
+                item_create_dt.innerHTML = data[i]['create_dt'];
+                item_title.innerHTML = data[i]['title'];
+                item_update_dt.innerHTML = data[i]['update_dt'];
+
+                itemtr.appendChild(item_create_dt);
+                itemtr.appendChild(item_title);
+                itemtr.appendChild(item_update_dt);
+
+
+                table.appendChild(itemtr);
+
+                itemtr.onclick = function () {
+                    location.href = '/termsdetail?id=' + data[i]['agree_seq'] + "&title=" + data[i]['title'] + "&content=" + data[i]['content'];
+                };
+            }
+        }
+        ,
+        err: function (err) {
+            alert(err.status);
+        }
+    });
+
+</script>
+{% endblock %}

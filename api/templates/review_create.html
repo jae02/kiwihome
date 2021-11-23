@@ -1,0 +1,207 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-12 col-md-6 col-lg-6" style=" max-width:100%;flex:100%;margin-top: 50px;">
+        <div class="card">
+            <div class="card-header">
+                <h4>사진 & 후기 등록</h4>
+                <div class="card-header-form" style="margin-top: 10px;">
+
+                </div>
+            </div>
+            <div class="card-body">
+
+                <div class="stock_input_con">
+
+                    <div style="" class="stock_drop_title">
+                        카테고리
+                    </div>
+                    <div class="dropdown d-inline mr-2">
+                        <button id="selector1" class="btn btn-primary dropdown-toggle" type="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            선택
+                        </button>
+                        <div class="category0 dropdown-menu">
+                            <a class="dropdown-item" onclick="setTextCus('selector1','패키지', 'PACKAGE');">패키지</a>
+                            <a class="dropdown-item" onclick="setTextCus('selector1','시공후기', 'USEREVIEW');">시공후기</a>
+                            <a class="dropdown-item" onclick="setTextCus('selector1','3D이미지', '3D');">3D이미지</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 70px;">
+                     <div class="stock_input_con" style="margin-left: 100px;">
+                         <label>주소</label>
+                        <input type="text" id="address" name="addr" class="form-control" readonly style="max-width:400px;">
+                        <div class="input-group-prepend" style="margin-left: 10px;">
+                            <div class="input-group-text"onclick="goPopup()">
+                                찾기
+                            </div>
+                        </div>
+                    </div>
+                    <div class="stock_input_con">
+                        <label class="line_lable">태그</label>
+                        <div class="tag-list"></div>
+                        <!--이부분에 태그 렌더-->
+                    </div>
+
+                    <div class="stock_input_con"
+                         style="margin-top: 30px; margin-bottom: 30px; color: #222222; font-weight: 700">
+                        대표사진 업로드
+                    </div>
+                    <div class="stock_input_con">
+
+                        <div class="image-container">
+                            <img style="width: 200px; height: 200px; border: #888888 1px solid" id="preview-image"
+                                 src="https://dummyimage.com/500x500/ffffff/000000.png&text=preview+image" class="img-add-btn">
+                            <input style="display: none;" type="file" name="file" id="input-image">
+                        </div>
+                    </div>
+
+                    <div style="margin: 40px;">
+                    요약 설명 작성
+                    </div>
+                    <div class="form-group row mb-4">
+                        <div class="col-sm-12 col-md-7" style=" max-width:100%;flex:100%;width: 100%;height: 100px;">
+                        <textarea class="summernote-simple" id="summary"
+                                  style=" max-width:100%;flex:100%;width: 100%;height: 80px;"></textarea>
+                        </div>
+                    </div>
+
+                    <div style="margin: 40px;margin-top:100px;">
+                         상세 설명 작성
+                    </div>
+                    <div class="form-group row mb-4">
+                        <div class="col-sm-12 col-md-7" style=" max-width:100%;flex:100%;width: 100%;height: 200px;">
+                        <textarea class="summernote-simple"
+                                  style="max-width:100%;flex:100%;width: 100%;height: 200px;" id="content"></textarea>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="" style="margin: auto;width: 100px;">
+                            <a style="color: #ffffff"
+                               class="btn btn-primary btn-lg btn-block btn-icon-split review_add">
+                                등록
+                            </a>
+                        </div>
+                    </div>
+
+                    <div style="margin: 40px;">
+                        패키지
+                        <div class="hide-sidebar-mini" style="margin: auto;width: 100px;">
+                            <a href="/package_create" style="color: #ffffff;float:left;" onclick=""
+                               class="btn btn-primary btn-lg btn-block btn-icon-split">
+                                등록
+                            </a>
+                            <a style="color: #ffffff;float:left;" onclick=""
+                               class="btn btn-primary btn-lg btn-block btn-icon-split">
+                                노출
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+    var gimg_url;
+    function goPopup(){
+        new daum.Postcode({
+            oncomplete: function(data) {
+                // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분입니다.
+                // 예제를 참고하여 다양한 활용법을 확인해 보세요.
+                document.getElementById("address").value = data.address;
+            }
+        }).open();
+    }
+    function getTagList(){
+        var param = {
+            "page" : "1" ,
+            "page_block": "99",
+            "searchs" : [] ,
+            "table" : "category_info"
+        }
+        ajaxCallPost(api_server + "getsearchdata", param, function (res) {
+            var template = $.templates("#review_create_category_list"); // <!-- 템플릿 선언
+            var htmlOutput = template.render(res); // <!-- 렌더링 진행 -->
+            $(".tag-list").html(htmlOutput);
+        })
+    }
+    $(function(){
+        $.views.settings.delimiters("((", "))");
+        $(document).on("click", ".img-add-btn", function(){
+                $("input[name=file]").trigger("click");
+         })
+         /*이미지 업로드*/
+        $(document).on("change", "input[name=file]", function(){
+            let file = $(this);
+            let extension = file.val().split('.')[1];
+            let filename = generate_token(28) + "." + extension;
+            let img_path = "static/data/";
+
+            savefile($("input[name=file]")[0].files[0], filename);
+
+           gimg_url = api_server  + img_path + filename;
+           $('#preview-image').attr('src',gimg_url);
+
+        });
+        getTagList();
+    })
+
+    $(".review_add").click(function(){
+            //var category_seq = $("#category-list").val();
+            var info_code = $("#selector1").attr("data-val") ? $("#selector1").attr("data-val") : null;
+            var addr =  $("input[name=addr]").val();
+
+            var tag =  '';
+            var tags = $("input:checkbox[name=tag]");
+
+            for(var i = 0 ; i < tags.length ; i++){
+                var ischk = tags.eq(i).is(":checked")
+                if(ischk && i != (tags.length-1)){
+                    tag += tags.eq(i).val() + ", ";
+                }
+            }
+            if(tag.length && tag.substring(tag.length-2, tag.length) == ', '){
+                tag = tag.substring(0, tag.length-2);
+            }
+
+            var summary =  $('#summary').summernote('code');
+            var content =  $('#content').summernote('code');
+           // var gallery_num =  $("input[name=gallery_num]").val();
+            var param = {
+                    "info_code":info_code,
+                    "addr" : addr,
+                    "tag" : tag,
+                    "img_url" : gimg_url,
+                    "summary" : summary,
+                    "content" : content,
+                    "gallery_num" : "gallery_num"
+            }
+            ajaxCallPost(api_server + "addreview", param, function(res){
+                if(res.status == 200){
+                   alert("사진 후기가 등록 되었습니다.");
+                   //location.href="/review_list";
+                }
+            },function(){})
+    })
+    $(document).ready(function() {
+      $('#summernote').summernote();
+    })
+
+<!--    var category = getCategory();-->
+<!--    setCategory_add(category);-->
+</script>
+<script type="text/x-jsrender" id="review_create_category_list">
+		((for data ))
+            <input style="width:200px;height: 25px;" type="checkbox" name="tag" value="((:name))" class="form-control category_detail_input"><span>((:name))</span>
+		((/for ))
+</script>
+
+
+{% endblock %}

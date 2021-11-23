@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+</head>
+<body>
+
+<div class="card-body">
+    <div class="table-responsive">
+
+        <form method="post" action="http://teambox.kr:5222/edditfile1" enctype="multipart/form-data" target="iframe1">
+            <input style="visibility: hidden;" id="store_seq" type="text" name="store_seq" value=""/>
+            <input type="file" name="filename"
+                   accept="image/jpeg,image/gif,image/png,application/pdf,image/x-eps"
+                   multiple="multiple">
+
+
+            <input type="submit" style="float : right;" value="변경" onclick="callbackfunction1();"/>
+
+
+        </form>
+        <iframe id="iframe1" name="iframe1" style="display:none"></iframe>
+    </div>
+</div>
+
+
+</body>
+<script>
+function getParam(sname) {
+
+    var params = location.search.substr(location.search.indexOf("?") + 1);
+
+    var sval = "";
+
+    params = params.split("&");
+
+    for (var i = 0; i < params.length; i++) {
+
+        temp = params[i].split("=");
+
+        if ([temp[0]] == sname) { sval = temp[1]; }
+
+    }
+
+    return sval;
+
+}
+    document.getElementById("store_seq").value = getParam('seq');
+
+
+
+    function callbackfunction1(){
+setTimeout(function(){
+   // 1초 후 작동해야할 코드
+      window.open("about:blank","_self").close();
+   }, 1000);
+opener.callbackparent();
+
+
+
+}
+
+</script>
+
+</html>

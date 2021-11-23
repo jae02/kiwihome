@@ -1,0 +1,527 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<script src="../static/js/commonAjax.js"></script>
+<style>
+
+    /*---------chat window---------------*/
+    .container {
+        max-width: 900px;
+    }
+
+    .inbox_people {
+        background: #fff;
+        float: left;
+        overflow: hidden;
+        width: 30%;
+        border-right: 1px solid #ddd;
+    }
+
+    .inbox_msg {
+        border: 1px solid #ddd;
+        clear: both;
+        overflow: hidden;
+    }
+
+    .top_spac {
+        margin: 20px 0 0;
+    }
+
+    .recent_heading {
+        float: left;
+        width: 40%;
+    }
+
+    .srch_bar {
+        display: inline-block;
+        text-align: right;
+        width: 60%;
+
+    }
+
+    .headind_srch {
+        padding: 10px 29px 10px 20px;
+        overflow: hidden;
+        border-bottom: 1px solid #c4c4c4;
+
+    }
+
+    .recent_heading h4 {
+        color: #0465ac;
+        font-size: 16px;
+        margin: auto;
+        line-height: 29px;
+    }
+
+    .srch_bar input {
+        outline: none;
+        border: 1px solid #cdcdcd;
+        border-width: 0 0 1px 0;
+        width: 80%;
+        padding: 2px 0 4px 6px;
+        background: none;
+    }
+
+    .srch_bar .input-group-addon button {
+        background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+        border: medium none;
+        padding: 0;
+        color: #707070;
+        font-size: 18px;
+    }
+
+    .srch_bar .input-group-addon {
+        margin: 0 0 0 -27px;
+    }
+
+    .chat_ib h5 {
+        font-size: 15px;
+        color: #464646;
+        margin: 0 0 8px 0;
+    }
+
+    .chat_ib h5 span {
+        font-size: 13px;
+        float: right;
+    }
+
+    .chat_ib p {
+        font-size: 12px;
+        color: #989898;
+        margin: auto;
+        display: inline-block;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .chat_img {
+        float: left;
+        width: 11%;
+    }
+
+    .chat_img img {
+        width: 100%
+    }
+
+    .chat_ib {
+        float: left;
+        padding: 0 0 0 15px;
+        width: 88%;
+    }
+
+    .chat_people {
+        overflow: hidden;
+        clear: both;
+    }
+
+    .chat_list {
+        border-bottom: 1px solid #ddd;
+        margin: 0;
+        padding: 18px 16px 10px;
+    }
+
+    .inbox_chat {
+        height: 550px;
+        overflow-y: scroll;
+    }
+
+    .active_chat {
+        background: #e8f6ff;
+    }
+
+    .incoming_msg_img {
+        display: inline-block;
+        width: 6%;
+    }
+
+    .incoming_msg_img img {
+        width: 100%;
+    }
+
+    .received_msg {
+        display: inline-block;
+        padding: 0 0 0 10px;
+        vertical-align: top;
+        width: 92%;
+    }
+
+    .received_withd_msg p {
+        background: #ebebeb none repeat scroll 0 0;
+        border-radius: 0 15px 15px 15px;
+        color: #646464;
+        font-size: 14px;
+        margin: 0;
+        padding: 5px 10px 5px 12px;
+        width: 100%;
+    }
+
+    .time_date {
+        color: #747474;
+        display: block;
+        font-size: 12px;
+        margin: 8px 0 0;
+    }
+
+    .received_withd_msg {
+        width: 57%;
+    }
+
+    .mesgs {
+        float: left;
+        padding: 30px 15px 0 25px;
+        width: 70%;
+    }
+
+    .sent_msg p {
+        background: #6777ef;
+        border-radius: 12px 15px 15px 0;
+        font-size: 14px;
+        margin: 0;
+        color: #fff;
+        padding: 5px 10px 5px 12px;
+        width: 100%;
+    }
+
+    .outgoing_msg {
+        overflow: hidden;
+        margin: 26px 0 26px;
+    }
+
+    .sent_msg {
+        float: right;
+        width: 46%;
+    }
+
+    .input_msg_write input {
+        background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+        border: medium none;
+        color: #4c4c4c;
+        font-size: 15px;
+        min-height: 48px;
+        width: 100%;
+        outline: none;
+    }
+
+    .type_msg {
+        border-top: 1px solid #c4c4c4;
+        position: relative;
+    }
+
+    .msg_send_btn {
+        background: #05728f none repeat scroll 0 0;
+        border: none;
+        border-radius: 50%;
+        color: #fff;
+        cursor: pointer;
+        font-size: 15px;
+        height: 33px;
+        position: absolute;
+        right: 0;
+        top: 11px;
+        width: 33px;
+    }
+
+    .messaging {
+        padding: 0 0 50px 0;
+    }
+
+    .msg_history {
+        height: 516px;
+        overflow-y: auto;
+    }
+</style>
+
+
+<script src="https://www.jsviews.com/download/jsrender.min.js"></script>
+<script>
+    var timer = null;
+    var time = 1000;
+    var isFirst = true;
+    var gmember_seq = sessionStorage.getItem("member_seq");
+    var gre_msg_seq = 0;
+    var groomRes = [];
+    $(function () {
+        $.views.settings.delimiters("((", "))");
+        $.views.helpers("dec",
+            function (val) {
+
+                var val2 = val == gmember_seq ? false : true;
+                return val2;
+            }
+        );
+
+        /*채팅창 검색*/
+        $(document).on("keyup", "input[name=search_value]", function () {
+            var search_value = $(this).val();
+
+            var temp = {};
+            var groomResFilter = [];
+            for (var i = 0; i < groomRes.data.length; i++) {
+                var groom = groomRes.data[i];
+                if (groom.name.indexOf(search_value) > -1) {
+                    groomResFilter.push(groom);
+                }
+            }
+
+            temp.data = groomResFilter;
+            getRoomService(temp)
+
+        });
+
+        /*이미지 전송 버튼 클릭시*/
+        $(document).on("click", ".img-add-btn", function () {
+            $("input[name=file]").trigger("click");
+        })
+
+        /*이미지 업로드*/
+        $(document).on("change", "input[name=file]", function () {
+            let file = $(this);
+            let extension = file.val().split('.')[1];
+            let filename = generate_token(28) + "." + extension;
+
+
+            savefile($("input[name=file]")[0].files[0], filename);
+
+            var file_url = api_server + img_uri + filename;
+
+            if (file_url && gre_msg_seq) {
+                var param = {
+                    "member_seq": gmember_seq,
+                    "re_msg_seq": gre_msg_seq,
+                    "content": file_url,
+                    "content_type": "I"
+                }
+                ajaxCallPost(api_server + "addmessage", param, function (res) {
+                    $("input[name=content]").val("");
+
+                    //getMsg(gre_msg_seq);
+
+
+                    clearInterval(timer);
+                    timer = setInterval(function () {
+                        getMsg()
+                    }, time);
+
+                })
+            }
+        });
+
+
+        /*채팅방 클릭시*/
+        $(document).on("click", ".chat-member-btn", function () {
+            $(".chat-member-btn").removeClass("active_chat");
+            $(this).addClass("active_chat");
+            var re_msg_seq = $(this).attr("data-re-msg-seq");
+            gre_msg_seq = re_msg_seq;
+
+            //getMsg(re_msg_seq);
+
+            clearInterval(timer);
+            timer = setInterval(function () {
+                getMsg()
+            }, time);
+
+
+        })
+
+        /*전송버튼 누를시*/
+        $(document).on("click", ".msg-add-btn", function () {
+            var content = $("input[name=content]");
+
+            if (content.val() && gre_msg_seq) {
+                var param = {
+                    "member_seq": gmember_seq,
+                    "re_msg_seq": gre_msg_seq,
+                    "content": content.val(),
+                    "content_type": "T"
+                }
+                ajaxCallPost(api_server + "addmessage", param, function (res) {
+                    $("input[name=content]").val("");
+                    //getMsg(gre_msg_seq);
+
+                    clearInterval(timer);
+                    timer = setInterval(function () {
+                        getMsg()
+                    }, time);
+
+                })
+            }
+        })
+
+        /*메시지내용에서 엔터 입력시*/
+        $(".write_msg").keydown(function (key) {
+            if (key.keyCode == 13) {
+                $(".msg-add-btn").trigger("click");
+            }
+        });
+
+
+        getRoom();
+    })
+
+    /* 채팅방 목록 가져오기 */
+    function getRoom() {
+        var param = {
+            "member_seq": gmember_seq
+        }
+        ajaxCallPost(api_server + "getrecentmsg", param, function (res) {
+            groomRes = res;
+            getRoomService(groomRes);
+        })
+    }
+
+    function getRoomService(res) {
+        var template = $.templates("#message_member_list"); // <!-- 템플릿 선언
+        var htmlOutput = template.render(res); // <!-- 렌더링 진행 -->
+        $(".chat-re-member-list").html(htmlOutput);
+
+        /*파라미터로 바로 넘어왓을경우*/
+        if (isFirst) {
+            let qs = getQueryStringObject();
+            var re_msg_seq = qs.re_msg_seq;
+
+            if (re_msg_seq) {
+                gre_msg_seq = re_msg_seq;
+                //getMsg(re_msg_seq)
+                clearInterval(timer);
+                timer = setInterval(function () {
+                    getMsg()
+                }, time);
+            }
+            isFirst = false;
+
+            var chats = $(".chat-member-btn");
+            for (var i = 0; i < chats.length; i++) {
+                if (chats.eq(i).attr("data-re-msg-seq") == re_msg_seq) {
+                    chats.eq(i).addClass("active_chat");
+                }
+            }
+
+
+        }
+
+
+    }
+
+    /* 채팅 내용 가져오기 */
+    function getMsg() {
+        //gre_msg_seq = re_msg_seq;
+        var param = {
+            "member_seq": gmember_seq,
+            "re_msg_seq": gre_msg_seq
+        }
+        ajaxCallPost(api_server + "getmessage", param, function (res) {
+            var template = $.templates("#message_msg_list"); // <!-- 템플릿 선언
+            var htmlOutput = template.render(res); // <!-- 렌더링 진행 -->
+            $(".msg-div-list").html(htmlOutput);
+
+            $('.msg-div-list').scrollTop($('.msg-div-list')[0].scrollHeight);
+
+
+        })
+    }
+
+
+</script>
+<script type="text/x-jsrender" id="message_member_list">
+		((for data ))
+		    <div data-re-msg-seq="((:re_msg_seq))" class="chat_list chat-member-btn">
+                    <div class="chat_people">
+                        <div class="chat_img"><img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"></div>
+                        <div class="chat_ib">
+                            <h5>((:name))(((:phone))) <span class="chat_date">((:create_dt))</span></h5>
+                            <p>
+                            ((if content_type == 'I'))
+                                이미지 전송
+                            ((else))
+                                ((:content))
+                            ((/if))
+                            </p>
+                        </div>
+                    </div>
+                </div>
+		((/for ))
+
+</script>
+<script type="text/x-jsrender" id="message_msg_list">
+		((for data ))
+		        ((if ~dec(member_seq) ))
+                    <div class="incoming_msg">
+                        <div class="incoming_msg_img"><img src="https://ptetutorials.com/images/user-profile.png"
+                                                           alt="sunil"></div>
+                        <div class="received_msg">
+                            <div class="received_withd_msg">
+                                <p>
+                                    ((if content_type == 'I'))
+                                        <img src="((:content))" style="width:100px">
+                                    ((else content_type == 'V'))
+                                        <video src='((:content))' style="width:100px"></video>
+                                    ((else))
+                                        ((:content))
+                                    ((/if))
+                                </p>
+                                <span class="time_date">((:create_dt))</span></div>
+                        </div>
+                    </div>
+                ((else))
+                    <div class="outgoing_msg">
+                        <div class="sent_msg" ((if content_type == 'I'))style="text-align:right"((/if))>
+                            <p ((if content_type == 'I'))style="background:unset"((/if))>
+                                    ((if content_type == 'I'))
+                                        <img src="((:content))" style="width:100px">
+                                    ((else content_type == 'V'))
+                                        <video src='((:content))' style="width:100px"></video>
+                                    ((else))
+                                        ((:content))
+                                    ((/if))
+                            </p>
+                            <span class="time_date">((:create_dt))</span></div>
+                    </div>
+                ((/if))
+
+		((/for ))
+
+</script>
+
+
+<body>
+
+<div class="messaging" style="margin-top: 50px;">
+    <div class="inbox_msg">
+        <div class="inbox_people">
+            <div class="headind_srch">
+                <div class="recent_heading">
+                    <h4 style="color: #6777ef">Recent</h4>
+                </div>
+                <div class="srch_bar">
+                    <div class="stylish-input-group">
+                        <input type="text" name="search_value" class="search-bar" placeholder="Search">
+                    </div>
+                </div>
+            </div>
+            <div class="inbox_chat scroll chat-re-member-list"></div>
+        </div>
+        <div class="mesgs">
+            <div class="msg_history msg-div-list"></div>
+
+            <div class="type_msg">
+                <div class="input_msg_write">
+                    <input type="text" class="write_msg" name="content" placeholder="Type a message"/>
+                    <button class="msg_send_btn img-add-btn" style="right:50px;width:50px" type="button">IMG</button>
+                    <input type="file" name="file" style="display:none">
+
+
+                    <button class="msg_send_btn msg-add-btn" type="button"><i class="fa fa-paper-plane"
+                                                                              aria-hidden="true"></i></button>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
+{% endblock %}

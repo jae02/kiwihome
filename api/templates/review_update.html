@@ -1,0 +1,225 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+<div class="row">
+</div>
+<script id="review-detail" type="text/x-jsrender">
+
+</script>
+    <div class="col-12 col-md-6 col-lg-6" style=" max-width:100%;flex:100%;margin-top: 50px;">
+        <div class="card">
+            <div class="card-header">
+                <h4>사진 & 후기 등록</h4>
+                <div class="card-header-form" style="margin-top: 10px;">
+
+                </div>
+            </div>
+            <div class="card-body">
+
+                <div class="stock_input_con">
+
+                    <div style="" class="stock_drop_title">
+                        카테고리
+                    </div>
+                    <div class="dropdown d-inline mr-2">
+                        <button id="selector1" class="btn btn-primary dropdown-toggle" type="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            선택
+                        </button>
+                        <div class="category0 dropdown-menu">
+                            <a class="dropdown-item" onclick="setText('selector1','시공 사진');">시공 사진</a>
+                            <a class="dropdown-item" onclick="setText('selector1','수리 후기');">수리 후기</a>
+                            <a class="dropdown-item" onclick="setText('selector1','3D 이미지');">3D 이미지</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 70px;">
+                     <div class="stock_input_con">
+                         <label>주소</label>
+                        <input type="text" id="address" name="addr" class="form-control" value="" readonly style="max-width:400px;">
+                        <div class="input-group-prepend" style="margin-left: 10px;">
+                            <div class="input-group-text"onclick="goPopup()">
+                                찾기
+                            </div>
+                        </div>
+                    </div>
+                    <!--
+                    <div class="stock_input_con">
+                        <label class="line_lable">태그</label>
+                        <input style="width:200px;height: 25px;" type="radio"
+                               class="line_input form-control category_detail_input">욕실
+                    </div>
+                       -->
+                    <div class="stock_input_con"
+                         style="margin-top: 30px; margin-bottom: 30px; color: #222222; font-weight: 700">
+                        대표사진 업로드
+                    </div>
+                    <div class="stock_input_con">
+
+                        <div class="image-container">
+                            <img style="width: 200px; height: 200px; border: #888888 1px solid" id="preview-image"
+                                 src="((:img_url))" class="img-add-btn">
+                            <input style="display: none;" type="file" name="file" value="" id="input-image">
+                        </div>
+                    </div>
+
+                    <div style="margin: 40px;">
+
+                        요약 설명 작성
+                    </div>
+                    <div class="form-group row mb-4">
+                        <div class="col-sm-12 col-md-7" style=" max-width:100%;flex:100%;width: 100%;height: 100px;margin-bottom:80px">
+                        <textarea class="summernote-simple" id="summary" name="summary"
+                                  style=" max-width:100%;flex:100%;width: 100%;height: 80px;"></textarea>
+                        </div>
+                    </div>
+
+                    <div style="margin: 40px;">
+
+                        상세 설명 작성
+                    </div>
+                    <div class="form-group row mb-4">
+                        <div class="col-sm-12 col-md-7" style=" max-width:100%;flex:100%;width: 100%;height: 200px;">
+                        <textarea class="summernote-simple" name="content"
+                                  style="max-width:100%;flex:100%;width: 100%;height: 200px;" id="content"></textarea>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="" style="margin: auto;width: 100px;">
+                            <a style="color: #ffffff"
+                               class="btn btn-primary btn-lg btn-block btn-icon-split review_update">
+                                수정
+                            </a>
+                        </div>
+                         <div class="" style="margin: auto;width: 100px;">
+                            <a style="color: #ffffff"
+                               class="btn btn-primary btn-lg btn-block btn-icon-split review_delete">
+                                삭제
+                            </a>
+                        </div>
+                    </div>
+
+                    <div style="margin: 40px;">
+                        패키지
+                        <div class="hide-sidebar-mini" style="margin: auto;width: 100px;">
+                            <a href="/package_create" style="color: #ffffff;float:left;" onclick=""
+                               class="btn btn-primary btn-lg btn-block btn-icon-split">
+                                수정
+                            </a>
+                            <a style="color: #ffffff;float:left;" onclick=""
+                               class="btn btn-primary btn-lg btn-block btn-icon-split">
+                                노출
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+<script>
+    let qs = getQueryStringObject();
+    var review_seq = qs.seq;
+    $(function(){
+        $.views.settings.delimiters("((", "))");
+     });
+    function goPopup(){
+        new daum.Postcode({
+            oncomplete: function(data) {
+                // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분입니다.
+                // 예제를 참고하여 다양한 활용법을 확인해 보세요.
+                document.getElementById("address").value = data.address;
+            }
+        }).open();
+    }
+    $(function(){
+     $(document).ready(function() {
+        var param = {
+            "review_seq":review_seq
+        }
+      ajaxCallPost("getonereview",param,function(res){
+                if(res.status == 200){
+                            var productObj = null;
+                for(var i = 0 ; i < res.data.length ; i++){
+                    if(res.data[i].review_seq == review_seq){
+                        productObj = res.data[i];
+                    }
+                }
+
+                if(productObj != null){
+                    $("input[name=addr]").val(productObj.addr);
+                    $("textarea[name=summary]").summernote('code',productObj.summary);
+                    $("textarea[name=content]").summernote('code',productObj.content);
+                    $("#preview-image").attr("src", productObj.img_url);
+                }
+        }
+       },function(){})
+    })
+    $(document).on("click", ".review_delete", function(){
+            var param = {
+                    "tablename" : "review" ,
+                    "wherecolumn" : "review_seq",
+                    "wherevalue" : review_seq,
+                    "category" :""
+            }
+            if (confirm('삭제 하시겠습니까?')) {
+            ajaxCallPost("deleterow", param, function(res){
+
+                if(res.status == 200){
+                   alert("삭제가 완료되었습니다. ");
+                   location.href="/review_list";
+                }
+            },function(){})
+            }
+    })
+    $(document).on("click", ".review_update", function(){
+            //var review_seq = $("#category-list").val();
+            var addr =  $("input[name=addr]").val();
+            var tag =  $("input[name=tag]").val();
+            var img_url1 =  $('#preview-image').attr('src');
+            var summary =  $('#summary').summernote('code');
+            var content =  $('#content').summernote('code');
+            var param = {
+                    "review_seq" : review_seq,
+                    "addr" : addr,
+                    "tag" : "tag",
+                    "img_url" : img_url1,
+                    "summary" : summary,
+                    "content" : content,
+                    "gallery_num":"test"
+            }
+            ajaxCallPost("updatereview", param, function(res){
+                if(res.status == 200){
+                   alert("수정이 완료되었습니다. ");
+                   location.href="/review_list";
+                }
+            },function(){})
+    })
+        $(document).on("click", ".img-add-btn", function(){
+            $("input[name=file]").trigger("click");
+        })
+
+        /*이미지 업로드*/
+        var img_url;
+        $(document).on("change", "input[name=file]", function(){
+            let file = $(this);
+            let extension = file.val().split('.')[1];
+            let filename = generate_token(28) + "." + extension;
+            let img_path = "static/data/";
+
+            savefile($("input[name=file]")[0].files[0], filename);
+
+           img_url = api_server  + img_path + filename;
+           $('#preview-image').attr('src',img_url);
+           //console.log("Dfdfd"+img_url);
+        });
+
+    });
+
+
+</script>
+
+{% endblock %}

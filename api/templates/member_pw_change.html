@@ -1,0 +1,54 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-12 col-md-6 col-lg-6" style=" max-width:100%;flex:100%;margin-top: 50px;">
+        <div class="card">
+            <div class="card-header">
+                <h4>계정 비밀번호 변경</h4>
+                <div class="card-header-form" style="margin-top: 10px;">
+
+                </div>
+            </div>
+            <div class="card-body">
+
+
+                <div style="margin-top: 70px;">
+                     <div class="stock_input_con">
+                        <label class="line_lable">새 비밀번호</label>
+                        <input style="width:200px;height: 25px;" type="text" id="pw"
+                               class="line_input form-control category_detail_input">
+                    </div>
+
+                    <div class="stock_input_con">
+                        <label class="line_lable">새 비밀번호 확인</label>
+                        <input style="width:200px;height: 25px;" type="text" id="pw_check"
+                               class="line_input form-control category_detail_input">
+                    </div>
+
+                    <div class="hide-sidebar-mini" style="margin: auto;width: 100px;">
+                        <a style="color: #ffffff" onclick="updatePw();"
+                           class="btn btn-primary btn-lg btn-block btn-icon-split">
+                            등록
+                        </a>
+                    </div>
+                </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+    let qs = getQueryStringObject();
+    var member_seq = qs.seq;
+
+    function updatePw(){
+        updatememberDetail(member_seq);
+    }
+
+    document.getElementById("maintitle").innerHTML = "비밀번호 변경";
+</script>
+{% endblock %}

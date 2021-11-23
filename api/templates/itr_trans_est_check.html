@@ -1,0 +1,77 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-12 col-md-6 col-lg-6" style=" max-width:100%;flex:100%;margin-top: 50px;">
+        <div class="card">
+            <div class="card-header">
+                <h4>인테리어 견적 목록</h4>
+                <div class="card-header-form" style="margin-top: 10px;">
+                    <input id="date"
+                           type="date"
+                           onchange="onDateChangeTrans();"
+                           style="margin-top: -1px; padding-left:10px; padding-right:10px;border-radius:30px;float:right;margin-left: 10px;border:1px #cccccc solid;">
+                    <div style="float: right;margin-left: 5px;">
+                        <div class="input-group" style="float: right;">
+                            <input type="text" class="searchtrans form-control" placeholder="Search">
+                            <div class="input-group-btn">
+                                <button class="btn btn-primary transSearch"><i
+                                        class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dropdown d-inline mr-2" style="float: right;margin-top: -1px">
+                        <button id="selector1" class="btn btn-primary dropdown-toggle" type="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            모두 보기
+                        </button>
+                        <div class="dropdown-menu transdrop">
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="log_table" class="table table-bordered table-md" style="font-weight: normal">
+                        <tr>
+                            <th>순번</th>
+                            <th>접수 채널</th>
+                            <th>견적 번호</th>
+                            <th>고객명</th>
+                            <th>주소</th>
+                            <th>작업</th>
+                            <th>삭제</th>
+                        </tr>
+
+                    </table>
+                </div>
+            </div>
+            <div class="card-footer text-right">
+                <nav class="d-inline-block">
+                    <ul id="page" class="pagination mb-0">
+
+
+                    </ul>
+                </nav>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+    var cate = '1';
+    var consult = getconsult('I', 'ON');
+    console.log(consult);
+    var categorylist = getcategorylist();
+    var job = getjob()
+    consult.reverse();
+    consultstarttrans(consult);
+    starttranslist();
+    setconsultrans(consult, 1);
+    document.getElementById("maintitle").innerHTML = "전송 견적 확인";
+</script>
+{% endblock %}

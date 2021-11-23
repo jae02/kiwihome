@@ -1,0 +1,19 @@
+{% extends 'stock_index.html' %}
+
+{% block content %}
+<div class="chat_list" style="display: flex; flex-wrap: wrap; justify-content: space-between;">
+
+</div>
+
+<script>
+
+    let qs = getQueryStringObject();
+    seq = qs.seq;
+    var products = getproductfromdetail(seq);
+    var product_item = getPage('/item/product.html');
+    if (!isEmpty(seq)) {
+        startstockpage(seq);
+    }
+
+</script>
+{% endblock %}

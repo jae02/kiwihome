@@ -1,0 +1,74 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-12 col-md-6 col-lg-6" style=" max-width:100%;flex:100%;margin-top: 50px;">
+        <div class="card">
+            <div class="card-header">
+                <h4>회원관리</h4>
+                <div class="card-header-form" style="margin-top: 10px;">
+                    <input id="date"
+                           type="date"
+                           onchange="onDateChangeUser();"
+                           style="margin-top: -1px;
+                           padding-left:10px;
+                           padding-right:10px;
+                           border-radius:30px;
+                           float:right;
+                           margin-left: 10px;
+                           border:1px #cccccc solid;">
+                    <div style="float: right;margin-left: 5px;">
+                        <div class="input-group" style="float: right;">
+                            <input id="keyword" type="text" class="form-control" placeholder="Search">
+                            <div class="input-group-btn">
+                                <button class="btn btn-primary" onclick="onUserSearchClick();"><i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="log_table" class="table table-bordered table-md">
+                        <tr>
+                            <th>순번</th>
+                            <th>아이디</th>
+                            <th>이름</th>
+                            <th>전화번호</th>
+                            <th>주소</th>
+                            <th>가입일</th>
+                            <th>메시지</th>
+                            <th>삭제</th>
+                            <th>재가입불가<br/>삭제</th>
+                        </tr>
+
+
+                    </table>
+                </div>
+            </div>
+            <div class="card-footer text-right">
+                <nav class="d-inline-block">
+                    <ul id="page" class="pagination mb-0">
+
+
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+
+    document.getElementById("maintitle").innerHTML = "회원 리스트";
+
+
+    var member = getmember();
+    member.reverse();
+    memberstart(member);
+    setmember(member, 1);
+</script>
+{% endblock %}

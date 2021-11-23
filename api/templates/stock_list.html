@@ -1,0 +1,116 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-12 col-md-6 col-lg-6" style=" max-width:100%;flex:100%;margin-top: 50px;">
+        <div class="card">
+            <div class="card-header">
+                <h4>재고 목록</h4>
+                <div class="card-header-form" style="margin-top: 10px;">
+                    <input type="date"
+                           style="margin-top: -1px; padding-left:10px; padding-right:10px;border-radius:30px;float:right;margin-left: 10px;border:1px #cccccc solid;">
+                    <div style="float: right;margin-left: 5px;">
+                        <div class="input-group" style="float: right;">
+                            <input type="text" class="searchproduct form-control" placeholder="Search">
+                            <div class="input-group-btn">
+                                <button class="btn btn-primary productSearch"><i
+                                        class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dropdown d-inline mr-2" style="float: right;margin-top: -1px">
+                        <button id="selector1" class="btn btn-primary dropdown-toggle" type="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            모두 보기
+                        </button>
+                        <div class="dropdown-menu transdrop">
+
+                        </div>
+                    </div>
+                    <div class="dropdown d-inline mr-2" style="float: right;margin-top: -1px">
+                        <button id="selector2" class="btn btn-primary dropdown-toggle" type="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            모두 보기
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" onclick="setText('selector2','모두 보기');">모두보기</a>
+                            <a class="dropdown-item" onclick="setText('selector2','진행');">진행</a>
+                            <a class="dropdown-item" onclick="setText('selector2','완료');">완료</a>
+                            <a class="dropdown-item" onclick="setText('selector2','취소');">취소</a>
+                            <a class="dropdown-item" onclick="setText('selector2','취소 완료');">취소 완료</a>
+                        </div>
+                    </div>
+                    <div class="dropdown d-inline mr-2" style="float: right;margin-top: -1px">
+                        <button id="selector3" class="btn btn-primary dropdown-toggle" type="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">모두 보기
+                        </button>
+                        <div class="dropdown-menu">
+
+                            <a class="dropdown-item" onclick="sortproductisactive('selector3','모두 보기');">모두 보기</a>
+                            <a class="dropdown-item" onclick="sortproductisactive('selector3','판매 보기');">판매 보기</a>
+                            <a class="dropdown-item" onclick="sortproductisactive('selector3','중지 보기');">중지 보기</a>
+                        </div>
+                    </div>
+
+                    <div class="hide-sidebar-mini" style="margin-right: 20px;float: right;width: 100px;">
+                        <a href="/stock_add" class="btn btn-primary btn-lg btn-block btn-icon-split">
+                            등록
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="log_table" class="table table-bordered table-md" style="font-weight: normal">
+                        <tr>
+                            <th>등록일</th>
+                            <th>상품번호</th>
+                            <th>카테고리</th>
+                            <th>상품명</th>
+                            <th>판매가</th>
+                            <th>재고</th>
+                            <th>판매 상태 변경</th>
+                            <th>복사</th>
+                            <th>자세히 보기</th>
+                        </tr>
+
+                    </table>
+                </div>
+            </div>
+            <div class="card-footer text-right">
+                <nav class="d-inline-block">
+                    <ul id="page" class="pagination mb-0">
+
+
+                    </ul>
+                </nav>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $(document).on("click", ".go-detail-btn", function () {
+            var seq = $(this).attr("data-seq");
+            location.href = "/stock_read?seq=" + seq;
+        })
+    })
+
+</script>
+<script>
+
+    var categorylist = getcategorylist();
+    var job = getjob()
+    var product = getproduct();
+    product.reverse();
+    productstart(product);
+    setproduct(product, 1);
+
+    startproductlist();
+    document.getElementById("maintitle").innerHTML = "물품 관리";
+</script>
+{% endblock %}

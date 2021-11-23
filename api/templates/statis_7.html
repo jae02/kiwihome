@@ -1,0 +1,59 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+
+<style>
+    canvas {
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        width: 100%;
+    }
+
+    .container {
+        position: relative;
+        width: 50%;
+        margin: 0 auto;
+    }
+
+</style>
+<div>
+
+
+    <div class="col-12 col-md-6 col-lg-6"
+         style="margin-right:0px;margin:20px 0;padding:0;max-width: 93%; color: #222222">
+        <div class="card">
+
+            <div class="card-body">
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/statis_1">시공</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/statis_2">물품 판매 수</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/statis_3">사용자</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/statis_4">협력업체</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/statis_5">정산</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/statis_6">접속 장치</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/statis_7">작업 평가</a>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+
+
+    </div>
+</div>
+{% endblock %}

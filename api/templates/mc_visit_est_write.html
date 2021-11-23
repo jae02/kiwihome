@@ -1,0 +1,187 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<div class="mt-4 mb-4 p-3 hide-sidebar-mini seeconsulting"
+     style="position: fixed ; right: 30px ; bottom: 30px; z-index: 20;">
+    <a class="btn btn-primary btn-lg btn-block btn-icon-split" style="color: #ffffff">
+        가견적서 보기
+    </a>
+</div>
+<div class="row">
+
+
+    <div class="col-12 col-md-6 col-lg-6" style="max-width: 48%">
+        <div class="card" style="margin-top: 20px;">
+            <div class="card-header">
+                <h4>기본 고객 정보 입력</h4>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label>이름</label>
+                    <input type="text" class="form-control name">
+                </div>
+                <div class="form-group">
+                    <label>전화번호</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                        </div>
+                        <input type="tel" class="form-control phone-number tel">
+                    </div>
+                </div>
+
+                <div class="form-group">
+
+                    <label>주소</label>
+
+                    <div class="input-group">
+                        <input type="text" class="addr1 form-control" readonly>
+                        <div class="input-group-prepend" style="margin-left: 10px;">
+                            <div class="input-group-text findPostCode">
+                                찾기
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="input-group" style="margin-top: 10px;">
+                        <input type="text" class="form-control addr2">
+                        <div class="input-group-prepend" style="margin-left: 10px;">
+                            <div class="input-group-text">
+                                평면도
+                            </div>
+                        </div>
+                        <div class="input-group-prepend" style="margin-left: 10px;">
+                            <div class="input-group-text">
+                                패키지
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+        <div class="card" style="margin-top: 20px;">
+            <div class="card-header">
+                <h4>인테리어 항목 선택</h4>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label class="form-label">Interior Options</label>
+                    <div id="optionlist" class="selectgroup selectgroup-pills">
+                    </div>
+                </div>
+                <div class="optionCon">
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-6 col-lg-6" style="max-width: 48%">
+        <div class="card">
+            <div class="card-header">
+                <h4>고객 메모</h4>
+            </div>
+            <div class="card-body">
+
+                <div class="form-group row mb-4">
+                    <div class="col-sm-12 col-md-7" style=" max-width:100%;flex:100%;width: 100%;height: 200px;">
+                        <textarea class="summernote-simple memo"
+                                  style=" max-width:100%;flex:100%;width: 100%;height: 200px;"></textarea>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="card" style="margin-top: 20px;">
+            <div class="card-header">
+                <h4>상담사 메모</h4>
+            </div>
+            <div class="card-body">
+
+                <div class="form-group row mb-4">
+                    <div class="col-sm-12 col-md-7" style=" max-width:100%;flex:100%;width: 100%;height: 200px;">
+                        <textarea class="summernote-simple ct_memo"
+                                  style=" max-width:100%;flex:100%;width: 100%;height: 200px;"></textarea>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h4>금액 작성</h4>
+            </div>
+            <div class="card-body">
+                <div class="form-group" style="margin-bottom: 5px;">
+                    <label>예상 총 금액</label>
+                    <input type="number" class="form-control invoice-input exp_pay" placeholder="원">
+                </div>
+                <div class="form-group" style="margin-bottom: 5px;">
+                    <label>출장비</label>
+                    <input type="number" class="form-control invoice-input off_pay" placeholder="원">
+                </div>
+                <div class="form-group" style="margin-bottom: 5px;">
+                    <label>계약금</label>
+                    <input type="number" class="form-control invoice-input down_pay" placeholder="원">
+                </div>
+
+                <div class="form-group" style="margin-bottom: 5px;">
+                    <label>잔금</label>
+                    <input type="number" class="form-control invoice-input end_pay" placeholder="원">
+                </div>
+
+            </div>
+
+
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <h4>기간 작성</h4>
+            </div>
+            <div class="card-body">
+                <div class="form-group" style="margin-bottom: 5px;">
+                    <label>고객 선호 작업일</label>
+                    <input class="start_dt" type="date" style="margin-left: 20px; border:1px #cccccc solid;">
+                </div>
+                <div class="form-group" style="margin-bottom: 5px;">
+                    <input class="end_dt" type="date" style="margin-left:118px;border:1px #cccccc solid;">
+                </div>
+                <div style=" display: flex;">
+                    <label class="line_lable" style=" width:100px;color: #222222;font-size: 12px;font-weight: 700">전체 예상
+                        작업일</label>
+                    <input placeholder="일" style="height: 25px;" type="number"
+                           class="exp_dt line_input form-control">
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+</div>
+<script>
+
+    var cate = '2';
+    var page = getPage('/item/option.html');
+    // var questions = getallquestion();
+    var questions = getallquestion();
+    var products = getproduct();
+    startMvWrite();
+    document.getElementsByClassName('findPostCode')[0].onclick = function () {
+        let element = document.getElementsByClassName('addr1')[0];
+        execDaumPostcode(element);
+    }
+    startmove();
+    document.getElementById("maintitle").innerHTML = "방문 견적 작성";
+
+</script>
+{% endblock %}

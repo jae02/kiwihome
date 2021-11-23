@@ -1,0 +1,90 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-12 col-md-6 col-lg-6" style=" max-width:100%;flex:100%;margin-top: 50px;">
+        <div class="card">
+            <div class="card-header">
+                <h4>패키지 등록</h4>
+                <div class="card-header-form" style="margin-top: 10px;">
+
+                </div>
+            </div>
+            <div class="card-body">
+
+                <div style="margin-top: 70px;">
+                    <div class="stock_input_con">
+                        <label class="line_lable">패키지명</label>
+                        <input style="width:200px;height: 25px;" type="text"
+                               class="line_input form-control category_detail_input">
+                    </div>
+                    <div class="stock_input_con">
+                        <label class="line_lable">인테리어 항목 선택</label>
+                        <input style="width:200px;height: 25px;" type="checkbox"
+                               class="line_input form-control category_detail_input">예시-욕실
+                        <!--이부분에 태그 렌더-->
+                    </div>
+
+                    <div class="stock_input_con"
+                         style="margin-top: 30px; margin-bottom: 30px; color: #222222; font-weight: 700">
+                        상세 정보 입력
+                    </div>
+                    <div class="stock_input_con">
+                        <label class="line_lable">면적</label>
+                        <input style="width:200px;height: 25px;" type="text"
+                               class="line_input form-control category_detail_input" placeholder="">
+                        <label class="line_lable">구매</label>
+                        <input style="width:200px;height: 25px;" type="text"
+                               class="line_input form-control category_detail_input">
+                        <label class="line_lable">시공비</label>
+                        <input style="width:200px;height: 25px;" type="text"
+                               class="line_input form-control category_detail_input">
+                        <label class="line_lable">수수료</label>
+                        <input style="width:200px;height: 25px;" type="text"
+                               class="line_input form-control category_detail_input">
+                        <label class="line_lable">욕실 견적</label>
+                        <input style="width:200px;height: 25px;" type="text"
+                               class="line_input form-control category_detail_input">
+                        <label class="line_lable">예상 작업일</label>
+                        <input style="width:200px;height: 25px;" type="text"
+                               class="line_input form-control category_detail_input">
+                        <label class="line_lable">출장비</label>
+                        <input style="width:200px;height: 25px;" type="text"
+                               class="line_input form-control category_detail_input">
+                    </div>
+
+                    <div>
+                        <div class="" style="margin: auto;width: 100px;">
+                            <a style="color: #ffffff" onclick="addcategoryDetail();"
+                               class="btn btn-primary btn-lg btn-block btn-icon-split">
+                                등록
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+    sessionStorage.setItem("addcatede", 0);
+
+
+    // input file에 change 이벤트 부여
+    const inputImage = document.getElementById("input-image");
+    inputImage.addEventListener("change", e => {
+        readImage(e.target)
+    })
+    document.getElementById("preview-image").onclick = function () {
+        inputImage.click();
+    };
+<!--    document.getElementById("maintitle").innerHTML = "물품 등록";-->
+
+
+<!--    var category = getCategory();-->
+<!--    setCategory_add(category);-->
+</script>
+{% endblock %}

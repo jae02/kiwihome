@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
+    <title>Blank Page &mdash; Stisla</title>
+
+    <!-- General CSS Files -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+          integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.min.js"></script>
+    <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <!-- CSS Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+    <script type="text/javascript" src="jscript/graph.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript" src="../static/js/main.js?v={{v}}"></script>
+    <script type="text/javascript" src="../static/js/api.js?v={{v}}"></script>
+    <script type="text/javascript" src="../static/js/review.js?v={{v}}"></script>
+    <script type="text/javascript" src="../static/js/jay02.js?v={{v}}"></script>
+    <!-- Template CSS -->
+    <link rel="stylesheet" href="../static/css/style.css?v={{v}}">
+    <link rel="stylesheet" href="../static/css/components.css">
+    <!-- include summernote css/js-->
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.css" rel="stylesheet">
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+
+    <script src="https://www.jsviews.com/download/jsrender.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsrender/1.0.11/jsrender.min.js"></script>
+
+</head>
+<body style="background: #ffffff">
+
+
+<div>
+    <div>
+        <label
+                style=" width:50px;margin:5px 0 0 20px;width:100px;color: #222222;font-weight: 700">
+            전화번호 추가</label>
+        <input id="ci_name" placeholder="번호" type="number" style="margin: 5%; width: 90%;height: 50px;"
+               class="form-control">
+    </div>
+</div>
+<img class="img_mt_add" style="margin:30px 30px;width: 30px; height: 30px;text-align: center"
+     src="../static/image/add.png" onclick="addreceiver()"/>
+<div class="receiver">
+</div>
+<div class=" mb-4  hide-sidebar-mini"
+     style="width:1000px;height: 30px; margin: 0px; margin-top: 5px;">
+
+    <a style="padding:5px;width: 130px;float: left; margin-top: 0px; margin-left: 20px; color: #ffffff"
+       class="  btn btn-primary btn-lg btn-block btn-icon-split" onclick="sendmessage(sort)">
+        전송
+    </a>
+</div>
+</div>
+<script>
+    // var api_server = "http://localhost:5222/";
+    var api_server = "http://teambox.kr:5222/";
+    var qs = getQueryStringObject();
+    var seq = qs.seq;
+    var sort = qs.sort;
+    var consulting_seq = seq;
+    var consultingdetail = getconsultdetail();
+
+    var value = qs.value;
+
+</script>
+</body>
+</html>
